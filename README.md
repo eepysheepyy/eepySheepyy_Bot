@@ -8,10 +8,15 @@ This is an ongoing project to eventually be a replacement for all 3rd party bots
 ## Requirements:
 
 node.js - https://nodejs.org/en
+
 dotenv - https://www.npmjs.com/package/dotenv
+
 discord.js - https://www.npmjs.com/package/discord.js
+
 openai - https://www.npmjs.com/package/openai
+
 tmi.js - https://www.npmjs.com/package/tmi.js
+
 obs-websocket-js - https://www.npmjs.com/package/obs-websocket-js
 
 ## How to run: 
