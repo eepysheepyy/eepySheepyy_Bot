@@ -26,11 +26,10 @@ tmi.js - https://www.npmjs.com/package/tmi.js
 
 obs-websocket-js - https://www.npmjs.com/package/obs-websocket-js
 
-- OBS Websocket Server - To setup the OBS Websockets side, (which is not essential) you can navigate to the Websockets setting inside OBS,
+- OBS Websocket Server - To setup the OBS Websockets side, (which is not essential) you can navigate to the Websockets setting inside OBS, and set a password if you haven't already, keep the port the same.
 
 The Addon (only needed if using the OBS version before the OBS Websocket Update) https://obsproject.com/forum/resources/obs-websocket-remote-control-obs-studio-using-websockets.466/
 
-and set a password if you haven't already, keep the port the same.
 
 ## How to run: 
 
