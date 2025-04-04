@@ -27,37 +27,38 @@ obs-websocket-js - https://www.npmjs.com/package/obs-websocket-js
 
 ## Functionality: 
 
-Discord:
-Discord Basic Functionality - Reads and Creates Messages
-Discord Automod - AI Checks messages, deletes if innapropriate, and sends a follow up message to clarify rules, also sends follow up message to a moderator chat.
-Discord Message Reaction - AI will respond to message when bot user is Pinged, or if it's keyword is mentioned in specific channels.
-Discord Message Intent - AI checks and categorises a message based on it's intent.
-Discord Reminders - Sends reminder message to specific channel for follow up.
-Discord to Twitch - Can send a Discord message to be sent to Twitch.
-Memory from Twitch/Discord Link - Memory is recorded in history.txt, and AI accesses this and summarises. This history is reset every half hour to preserve storage.
+### Discord:
 
-Twitch:
-Twitch Basic Functionality - Reads and Creates Messages
-Twitch Message Reaction - AI will respond to message when bot user is Pinged
-Twitch Commands - If not a set of commands that require different interactions, AI will power text based commands.
-Twitch Message Intent: AI checks and categorises a message based on it's intent.
-Twitch Reminders - Same functionality as above, just on Twitch to write to Discord
-Twitch to Discord - Can send a Twitch message to be sent to Discord.
-Translation - Auto-translation for localisation.
-Memory from Twitch/Discord Link - Memory is recorded in history.txt, and AI accesses this and summarises. This history is reset every half hour to preserve storage.
+- Discord Basic Functionality - Reads and Creates Messages
+- Discord Automod - AI Checks messages, deletes if innapropriate, and sends a follow up message to clarify rules, also sends follow up message to a moderator chat.
+- Discord Message Reaction - AI will respond to message when bot user is Pinged, or if it's keyword is mentioned in specific channels.
+- Discord Message Intent - AI checks and categorises a message based on it's intent.
+- Discord Reminders - Sends reminder message to specific channel for follow up.
+- Discord to Twitch - Can send a Discord message to be sent to Twitch.
+- Memory from Twitch/Discord Link - Memory is recorded in history.txt, and AI accesses this and summarises. This history is reset every half hour to preserve storage.
 
-OBS:
-Links to OBS Websockets, OBS Functions independently from the rest of the bot
-Websockets respond to Commands 
+### Twitch:
+- Twitch Basic Functionality - Reads and Creates Messages
+- Twitch Message Reaction - AI will respond to message when bot user is Pinged
+- Twitch Commands - If not a set of commands that require different interactions, AI will power text based commands.
+- Twitch Message Intent: AI checks and categorises a message based on it's intent.
+- Twitch Reminders - Same functionality as above, just on Twitch to write to Discord
+- Twitch to Discord - Can send a Twitch message to be sent to Discord.
+- Translation - Auto-translation for localisation.
+- Memory from Twitch/Discord Link - Memory is recorded in history.txt, and AI accesses this and summarises. This history is reset every half hour to preserve storage.
+
+### OBS:
+- Links to OBS Websockets, OBS Functions independently from the rest of the bot
+- Websockets respond to Commands 
 
 ---------
 
 # Planning Phase 2 - Planning to Work on over April
 
-Rule 6 'Moderation' - There will be a sub-set of Automod which will jokingly react to messages that breach rule 6.
-The Rule 6 Game - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
-Unlurk Powers - Will be re-added, with hopefully a little flair, and maybe some Discord interactions (?)
-Websockets interact with Stagify - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
+- Rule 6 'Moderation' - There will be a sub-set of Automod which will jokingly react to messages that breach rule 6.
+- The Rule 6 Game - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
+- Unlurk Powers - Will be re-added, with hopefully a little flair, and maybe some Discord interactions (?)
+- Websockets interact with Stagify - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
 
 ---------
 
@@ -67,6 +68,6 @@ Phase 3 expands upon the Twitch-Bot functionality, but this requires learning Tw
 
 Planning on focusing on:
 
-Twitch Welcoming users to the stream.
-Twitch Alerts firing on OBS without 3rd party
-Twitch Automod 
+- Twitch Welcoming users to the stream.
+- Twitch Alerts firing on OBS without 3rd party
+- Twitch Automod 
