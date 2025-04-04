@@ -62,7 +62,7 @@ obs-websocket-js - https://www.npmjs.com/package/obs-websocket-js
 
 ---------
 
-...Planning Phase 3
+### Planning Phase 3
 
 Phase 3 expands upon the Twitch-Bot functionality, but this requires learning Twitch API, which is, by the looks of things, quite complex, I've also had 0 experience with it, so this will be in the future, hopefully by the middle of the year.
 
