@@ -22,7 +22,7 @@ openai - https://www.npmjs.com/package/openai
 tmi.js - https://www.npmjs.com/package/tmi.js
 
 - An extra Twitch account for your bot user
-- OAuth Token
+- OAuth Token - Can be generated: https://twitchtokengenerator.com/
 
 obs-websocket-js - https://www.npmjs.com/package/obs-websocket-js
 
