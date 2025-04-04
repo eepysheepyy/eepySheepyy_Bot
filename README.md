@@ -70,4 +70,15 @@ Planning on focusing on:
 
 - Twitch Welcoming users to the stream.
 - Twitch Alerts firing on OBS without 3rd party
-- Twitch Automod 
+- Twitch Automod
+
+
+## Links
+
+You can find my website is https://eepysheepyy.com/
+
+And uou can find my Twitch here: https://www.twitch.tv/eepysheepyy
+
+You can feel free to check out all my other socials and stuff here: https://linktr.ee/eepysheepyy
+
+I hope you all have a BAA-Rilliant Day <33
