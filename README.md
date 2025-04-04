@@ -13,11 +13,24 @@ dotenv - https://www.npmjs.com/package/dotenv
 
 discord.js - https://www.npmjs.com/package/discord.js
 
+- A discord application for your bot-user: https://discord.com/developers/applications
+
 openai - https://www.npmjs.com/package/openai
+
+- An Open AI Key: https://platform.openai.com/
 
 tmi.js - https://www.npmjs.com/package/tmi.js
 
+- An extra Twitch account for your bot user
+- OAuth Token
+
 obs-websocket-js - https://www.npmjs.com/package/obs-websocket-js
+
+- OBS Websocket Server - To setup the OBS Websockets side, (which is not essential) you can navigate to the Websockets setting inside OBS,
+
+The Addon (only needed if using the OBS version before the OBS Websocket Update) https://obsproject.com/forum/resources/obs-websocket-remote-control-obs-studio-using-websockets.466/
+
+and set a password if you haven't already, keep the port the same.
 
 ## How to run: 
 
