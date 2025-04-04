@@ -1,0 +1,22 @@
+{
+  "name": "sheepydiscord",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type":"commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@notionhq/client": "^2.3.0",
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7",
+    "obs-websocket-js": "^5.0.6",
+    "openai": "^4.89.0",
+    "tmi.js": "^1.8.5"
+  }
+}
