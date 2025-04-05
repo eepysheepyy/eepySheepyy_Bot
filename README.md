@@ -48,7 +48,7 @@ The Addon (only needed if using the OBS version before the OBS Websocket Update)
 - Discord Reminders - Sends reminder message to specific channel for follow up.
 - Discord to Twitch - Can send a Discord message to be sent to Twitch.
 - Memory from Twitch/Discord Link - Memory is recorded in history.txt, and AI accesses this and summarises. This history is reset every half hour to preserve storage.
-- - Rule 6 'Moderation' - a sub-set of Automod which will jokingly react to messages that breach rule 6.
+- Rule 6 'Moderation' - a sub-set of Automod which will jokingly react to messages that breach rule 6.
 
 ### Twitch:
 - Twitch Basic Functionality - Reads and Creates Messages
