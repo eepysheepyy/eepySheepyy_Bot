@@ -1,9 +1,9 @@
-require('dotenv/config');
-const {Client} = require('discord.js');
-const {OpenAI} = require('openai');
-const tmi = require('tmi.js');
-const fs = require('fs')
-const { OBSWebSocket } = require('obs-websocket-js'); // Destructure for clarity
+require('dotenv/config'); // for environment variables to be read from .env
+const {Client} = require('discord.js'); // for connecting to Discord
+const {OpenAI} = require('openai'); // connecting to OpenAI
+const tmi = require('tmi.js'); // connecting to Twitch
+const fs = require('fs') // File system
+const { OBSWebSocket } = require('obs-websocket-js'); // connecting to OBS
 var connected = 0
 
 const obs = new OBSWebSocket();
@@ -173,6 +173,12 @@ Twclient.on('message', async (channel, tags, message, self) => {
         await obs.call('ToggleInputMute', {inputName: 'Shure'});
         return
     }
+
+    if (message.includes("connect") && tags['display-name'] == "eepySheepyy" && connected == 0){
+        connectToOBS()
+        return
+    }
+
     if (message.includes("hug ")){
         const splitMessage = message.split(" ");
         let hugMention = splitMessage[1]
@@ -247,7 +253,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
         messages: [
             {
                 role: 'system',
-                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, if relating to: Branding, Streams, Streaming tools/Resources, Twitch, Youtube, or other Social Media/information to do with eepySheepyy, print STREAMS. If relating to lore, or just normal conversational enquiries, or anything to do with Sheepys character, print LORE. If relating to reminders, (such as setting a reminder) print REMINDERS. If relating to Discord, Rules, Commands or other guidelines, plese print GUIDE, if the message specifies to send a message over to Discord, please print DISCORD , if the message is in a language other than English, or needs translation, please print LOTE , if enquiry is in regard to what youve (sheepy) has said (on Twitch or Discord), please print HISTORY',
+                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, if relating to: Branding, Streams, Streaming tools/Resources, Twitch, Youtube, or other Social Media/information to do with eepySheepyy, print STREAMS. If relating to lore, or just normal conversational enquiries, or anything to do with Sheepys character, print LORE. If relating to reminders, (such as setting a reminder) print REMINDERS. If relating to Discord, Rules, Commands or other guidelines, plese print GUIDE, if the message directly specifies to send a message over to Discord, please print DISCORD , if the message is in a language other than English, or needs translation, please print LOTE , if enquiry is in regard to what has been going on with you, or what you have said, or what someone has missed from you,  please print HISTORY',
             },
             {
                 role: 'user',
@@ -518,7 +524,7 @@ client.on('messageCreate', async (message) => {
         messages: [
             {
                 role: 'system',
-                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, If the message contains any of the following: Bullying, harrassment, blackmail, nudity, gore/blood/descriptions that may be triggering, sexual works, repeated spam, self-advertisement, too many (25+) emojis, someones age, political views, excessive swearing aimed towards someone (Mild swearing is okay), begging for money/subscriptions, or any other form of innapropriate content you must print the value: Rule Break:. If the message doesnt contain any of these, print FALSE. After printing the value, if TRUE, and not obvious about what is being broken, please provide a very brief description of how it broke the rules, if such could be considered triggering or inappropriate, please just advise the content was inappropriate/potentially triggering and guide them to review the rules, and please DONT mention the potentially triggering words or subjects (like blood, violence, death, gore, etc.) in your response!',
+                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, If the message contains any of the following: Bullying (excluding joking banter), harrassment, blackmail, nudity, gore/blood/descriptions that may be triggering, sexual works, repeated spam, too many (50+) emojis, someones age, political views, excessive swearing aimed towards someone (Mild swearing is okay), begging for money/subscriptions, or any other form of innapropriate content you must print the value: Rule Break:. If the message doesnt contain any of these, print FALSE. After printing the value, if TRUE, and not obvious about what is being broken, please provide a very brief description of how it broke the rules, if such could be considered triggering or inappropriate, please just advise the content was inappropriate/potentially triggering and guide them to review the rules, and please DONT mention the potentially triggering words or subjects (like blood, violence, death, gore, etc.) in your response! There is an additional rule that will also be targetted outside of those rules, which is Rule 6, which consists of the following: No rickrolls, No Arson, no wars, no guns, no stabbing, no eating hair (unless its your own, and in that case, its not in large amounts), no eating Art (unless its directly consented by the artist), no eating Cats or Sheep, no violence, or death and then, of course NO illegal actions, ITS GIFS and not JIFS, and MOST IMPORTANTLY: Rule #6 isnt Changing, so don’t acknowledge that it is. If the message breaches Rule 6, please print RULE 6: <then a brief description here of how it violated Rule 6, please note this is meant to be in a joking fashion, so you can be a little silly with this>. Please note that Rule Break: immediately overrides Rule 6:, so please dont include both, only the specific instance of which rules are being broken. A normal Rule Break is NOT meant to be comedic or silly, so Rule 6 is quite different than normal.',
             },
             {
                 role: 'user',
@@ -546,6 +552,22 @@ client.on('messageCreate', async (message) => {
         console.log("Message Stored")
         return
     }
+    if (automod.choices[0].message.content.includes("RULE 6:")) {
+        var messageText = String(`${message.author.toString()}, ${automod.choices[0].message.content}`)
+        var realMessageText = message.content;
+        var messageAuthor = message.author;
+        var messageChannel = message.channelId;
+        client.channels.cache.get(messageChannel).send(messageText);
+        const data = `\n ${automod.choices[0].message.content}`
+        fs.appendFile('history.txt', data, (err) => {
+    
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+        console.log("Message Stored")
+        return
+
+    }
 
     // End of Automod
     console.log("Starting Enquiry check!")
@@ -562,7 +584,7 @@ client.on('messageCreate', async (message) => {
         messages: [
             {
                 role: 'system',
-                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, if relating to: Branding, Streams, Streaming tools/Resources, Twitch, Youtube, or other Social Media/information to do with eepySheepyy, print STREAMS. If relating to lore, or just normal conversational enquiries, or anything to do with Sheepys character, print LORE. If relating to reminders, (such as setting a reminder) print REMINDERS. If relating to Discord, Rules, or other guidelines, plese print GUIDE. If it relates to sending a message to Twitch/Chat, please print TWITCH , if the message is in a language other than English, or needs translation, please print LOTE , when in regard to what has happened, or what you have said, or what someone has missed from you, or what youve (sheepy) has said (on Twitch or Discord), please print HISTORY',
+                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, if relating to: Branding, Streams, Streaming tools/Resources, Twitch, Youtube, or other Social Media/information to do with eepySheepyy, print STREAMS. If relating to lore, or just normal conversational enquiries, or anything to do with Sheepys character, print LORE. If relating to reminders, (such as setting a reminder) print REMINDERS. If relating to Discord, Rules, or other guidelines, plese print GUIDE. If it specifically directs to sending a message to Twitch/Chat, please print TWITCH , if the message is in a language other than English, or needs translation, please print LOTE , when in regard to what has happened, or what you have said, or what someone has missed from you, or what youve (sheepy) has said, or whats gone on, please print HISTORY',
             },
             {
                 role: 'user',
