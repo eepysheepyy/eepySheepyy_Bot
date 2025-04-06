@@ -94,3 +94,16 @@ And uou can find my Twitch here: https://www.twitch.tv/eepysheepyy
 You can feel free to check out all my other socials and stuff here: https://linktr.ee/eepysheepyy
 
 I hope you all have a BAA-Rilliant Day <33
+
+
+## Update Notes: 
+
+V2.0.1: 
+Added a !connect command for personal use to attempt reconnection to OBS whilst allowing continuation of the rest of the script
+Tweaked some GPT prompts to add specifications
+Added Rule 6 Moderation on Discord - Messages will not be deleted, but will be alerted for breaking rule 6.
+
+V2.0.2:
+- !lurk now only registers once, and cannot be used multiple times by the same person
+- Added an !unlurk command that removes one's lurk status, note this doesn't work when someone has not lurked. 
+- Messages from users are now logged in Sheepy's memory for better context for 'history' categorisation, please note that history still has a span of half an hour, to preserve file space and privacy
