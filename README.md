@@ -99,9 +99,9 @@ I hope you all have a BAA-Rilliant Day <33
 ## Update Notes: 
 
 V2.0.1: 
-Added a !connect command for personal use to attempt reconnection to OBS whilst allowing continuation of the rest of the script
-Tweaked some GPT prompts to add specifications
-Added Rule 6 Moderation on Discord - Messages will not be deleted, but will be alerted for breaking rule 6.
+- Added a !connect command for personal use to attempt reconnection to OBS whilst allowing continuation of the rest of the script
+- Tweaked some GPT prompts to add specifications
+- Added Rule 6 Moderation on Discord - Messages will not be deleted, but will be alerted for breaking rule 6.
 
 V2.0.2:
 - !lurk now only registers once, and cannot be used multiple times by the same person
