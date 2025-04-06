@@ -4,7 +4,7 @@ const {OpenAI} = require('openai'); // connecting to OpenAI
 const tmi = require('tmi.js'); // connecting to Twitch
 const fs = require('fs') // File system
 const { OBSWebSocket } = require('obs-websocket-js'); // connecting to OBS
-var connected = 0
+var connected = 0 // variable to check if OBS is connected for !reconnect to trigger.
 
 const obs = new OBSWebSocket();
 
@@ -18,17 +18,17 @@ async function connectToOBS() {
   } catch (error) {
     // Log the error, but don't stop the rest of the code
     console.error('Failed to connect to OBS:', error.code, error.message);
+    connected = 0
   } finally {
-    // This ensures the rest of your code continues running
+    // This ensures the rest of the code continues running
     console.log('Continuing the rest of the script...');
   }
 }
 
 // Call the connectToOBS function and continue with the rest of the script
 connectToOBS().then(() => {
-  // Add any other code you want to run after trying to connect
   function onCurrentSceneChanged(event) {
-    console.log('Current scene changed to', event.sceneName)
+    console.log('Current scene changed to', event.sceneName) // Logs anytime a scene is changed, planning on using this later for contextual commands
   }
   
 obs.on('CurrentProgramSceneChanged', onCurrentSceneChanged);
@@ -36,19 +36,19 @@ obs.on('CurrentProgramSceneChanged', onCurrentSceneChanged);
 return
 });
 
-var spawnNum = 0;
-var ballNum = 0;
-var duckCount = 0;
+var spawnNum = 0; // for PCG
+var ballNum = 0; // for PCG
+var duckCount = 0; // for duck command - to build later
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_KEY,
+    apiKey: process.env.OPENAI_KEY, // connect to openAI using key
 });
 
 const Twclient = new tmi.Client({
 	options: { debug: true },
 	identity: {
 		username: process.env.TWITCH_USER,
-		password: process.env.TWITCH_OAUTH,
+		password: process.env.TWITCH_OAUTH, // connect to twitch using oauth
 	},
 	channels: [ 'eepySheepyy' ]
 });
@@ -57,7 +57,7 @@ const clearIntervalTime = 1800000; // Time interval in milliseconds (e.g., 5000m
 
 async function clearFileContent() {
   try {
-    // Clearing the file by writing an empty string
+    // Clearing the file by writing an empty string - to avoid history becoming too large.
     await fs.promises.writeFile("history.txt", '');
     console.log(`File content cleared at ${new Date().toLocaleTimeString()}`);
   } catch (err) {
@@ -77,46 +77,46 @@ Twclient.on('message', async (channel, tags, message, self) => {
 	// Ignore echoed messages.
 	if(self) return;
 
-    if (message.startsWith("!")){
+    const data = `\n @${tags.username} said: ${message}`
+    fs.appendFile('history.txt', data, (err) => {
+        // In case of a error throw err.
+        if (err) throw err;
+    })
 
-        if (message.includes("GOGOGO") && tags['display-name'] == "StreamElements"){
+    if (message.startsWith("!")){ // ! commands
+
+        if (message.includes("GOGOGO") && tags['display-name'] == "StreamElements"){ // PCG command to register spawns
             spawnNum = spawnNum + 1;
             console.log("Pokemon Spawned in Chat. Now includes " + spawnNum + " Spawns");
             return
         }
-        if (message.toLowerCase().includes("pool")){
+        if (message.toLowerCase().includes("pool")){ // PCG command to see how many pokemon have spawned
             var spawnText = String(spawnNum)
             Twclient.say(channel, `@${tags.username}, there has been ${spawnText} Pokemon Spawns since I have been active!`);
             const data = `\n @${tags.username}, there has been ${spawnText} Pokemon Spawns since I have been active!`
             fs.appendFile('history.txt', data, (err) => {
-
-                // In case of a error throw err.
                 if (err) throw err;
             })
             return
         }
-        if (message.toLowerCase().includes("pokecatch")){
+        if (message.toLowerCase().includes("pokecatch")){ // PCG Command to register catch attempts
             ballNum = ballNum + 1;
             console.log("Attempt Made to Catch Pokemon. Now includes " + ballNum + " Attempts");
             return
         }
-        if (message.toLowerCase().includes("attempts")){
+        if (message.toLowerCase().includes("attempts")){ // PCG command to show catch attempts
             var ballText = String(ballNum)
             Twclient.say(channel, `@${tags.username}, there has been ${ballText} pokecatch attempts since I have been active!`);
             const data = `\n @${tags.username}, there has been ${ballText} pokecatch attempts since I have been active!`
             fs.appendFile('history.txt', data, (err) => {
-
-                // In case of a error throw err.
                 if (err) throw err;
             })
             return
         }
-        if (message.toLowerCase().includes("pcgcmd")){
+        if (message.toLowerCase().includes("pcgcmd")){ // PCG command to show commands
             Twclient.say(channel, `@${tags.username}, The Sheep-Bot currently has the following commands for PCG: !pool to see how many pokemon have spawned, and !attempts to see how many attemprs have been made on the stream!`);
             const data = `\n @${tags.username}, The Sheep-Bot currently has the following commands for PCG: !pool to see how many pokemon have spawned, and !attempts to see how many attemprs have been made on the stream!`
             fs.appendFile('history.txt', data, (err) => {
-
-                // In case of a error throw err.
                 if (err) throw err;
             })
             return
@@ -125,13 +125,21 @@ Twclient.on('message', async (channel, tags, message, self) => {
             Twclient.say(channel, `@${tags.username}, Some people in chat identify as having a personality disorder, where they can temporarily 'front' as someone else. These can be children, or other aged individuals that may not know things, or others. Please be kind and respecful to these people, and treat them like everyone else <3`);
             const data = `\n @${tags.username}, Some people in chat identify as having a personality disorder, where they can temporarily 'front' as someone else. These can be children, or other aged individuals that may not know things, or others. Please be kind and respecful to these people, and treat them like everyone else <3`
             fs.appendFile('history.txt', data, (err) => {
-
-                // In case of a error throw err.
                 if (err) throw err;
             })
             return
         }
-        if (message.toLowerCase().includes("lurk")){
+        if (message.toLowerCase().includes("lurk") && message.toLowerCase().includes("unlurk") == false){
+           var lurkerList = fs.readFileSync("lurkers.txt").toString('utf-8');
+           input = tags.username;
+           if (lurkerList.includes(input)){ // tests to see if user has already been set as a lurker
+               Twclient.say(channel, `@${tags.username}, You are already a lurker, you can't lurk twice!`);
+               const data = `\n @${tags.username}, You are already a lurker!`
+               fs.appendFile('history.txt', data, (err) => {
+                   if (err) throw err;
+               })
+               return
+           }
             const lurkText = await openai.chat.completions
     .create({
         model: 'gpt-4o-mini', 
@@ -146,16 +154,44 @@ Twclient.on('message', async (channel, tags, message, self) => {
             }        
         ], 
     })
-    console.log(lurkText.choices[0].message.content)
     Twclient.say(channel, `@${tags.username}, ${lurkText.choices[0].message.content}`);
     const data = `\n @${tags.username}, ${lurkText.choices[0].message.content}`
             fs.appendFile('history.txt', data, (err) => {
-
-                // In case of a error throw err.
+                if (err) throw err;
+            })
+            lurked = `${tags.username}, `;
+            console.log(lurked)
+            fs.appendFile('lurkers.txt', lurked, (err) => {
                 if (err) throw err;
             })
     return
     }
+    if (message.toLowerCase().includes("unlurk")){
+        var lurkerList = fs.readFileSync("lurkers.txt").toString('utf-8');
+        let lurkerArray = [lurkerList]
+        console.log(lurkerArray)
+        input = tags.username;
+        if (lurkerList.includes(input)){ // tests to see if user has already been set as a lurker
+            lurkerArray.splice(lurkerArray.indexOf(`${tags.username}, `), 1);
+            console.log(lurkerArray)
+            let lurkerText = lurkerArray.toString();
+            fs.writeFileSync('lurkers.txt', lurkerText);
+            Twclient.say(channel, `@${tags.username}, You are no longer a lurker!`);
+            const data = `\n @${tags.username}, You are no longer a lurker!`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            return
+        } else{
+            Twclient.say(channel, `@${tags.username}, You are not a lurker!`);
+            const data = `\n @${tags.username}, You are not a lurker!`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            return
+        }
+    }
+
     if (message.includes("brb") && tags['display-name'] == "eepySheepyy" && connected == 1){
         Twclient.say(channel, "Don't worry I will be right baaaack with you shortly! Feel free to use the time to grab a snack, blankie or some snacks! Or sit back, relax, and enjoy the clip compliation!" )
         await obs.call('SetCurrentProgramScene', {sceneName: 'BRB'});
@@ -189,7 +225,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
                 // In case of a error throw err.
                 if (err) throw err;
             })
-        if(tags.subscriber == true && connected == 1){
+        if(tags.subscriber == true && connected == 1){ //sub command implementation
             await obs.call('SetSourceFilterEnabled', {sourceName: 'SC', filterName: "Love", filterEnabled: true})
             console.log("Sub Command: HUG, Activated")
             await new Promise(r => setTimeout(r, 15000));
@@ -218,7 +254,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
         return
     }
     
-        const TwCheck = await openai.chat.completions
+        const TwCheck = await openai.chat.completions // checking for other commands that dont require anything but text.
     .create({
         model: 'gpt-4o-mini', 
         messages: [
@@ -247,7 +283,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
 
         // Check Enquiry
 
-        const checkTwEnquiry = await openai.chat.completions
+        const checkTwEnquiry = await openai.chat.completions // categorisation system - twitch
     .create({
         model: 'gpt-4o-mini', 
         messages: [
@@ -515,6 +551,11 @@ const CHANNELS = process.env.DISCORD_CHANNELS
 client.on('messageCreate', async (message) => {
     console.log(`Message Logged: ${message.content}`);
     if (message.author.bot) return;
+    const datablock = `\n @${message.author.tag} said: ${message}`
+    fs.appendFile('history.txt', datablock, (err) => {
+        // In case of a error throw err.
+        if (err) throw err;
+    })
 
     // Automod
     console.log("Starting Automod check!")
