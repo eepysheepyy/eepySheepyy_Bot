@@ -48,6 +48,7 @@ The Addon (only needed if using the OBS version before the OBS Websocket Update)
 - Discord Reminders - Sends reminder message to specific channel for follow up.
 - Discord to Twitch - Can send a Discord message to be sent to Twitch.
 - Memory from Twitch/Discord Link - Memory is recorded in history.txt, and AI accesses this and summarises. This history is reset every half hour to preserve storage.
+- Rule 6 'Moderation' - There is a sub-set of Automod which jokingly reacts to messages that breach rule 6.
 
 ### Twitch:
 - Twitch Basic Functionality - Reads and Creates Messages
@@ -67,8 +68,6 @@ The Addon (only needed if using the OBS version before the OBS Websocket Update)
 
 # Planning Phase 2 - Planning to Work on over April
 
-- Rule 6 'Moderation' - There will be a sub-set of Automod which will jokingly react to messages that breach rule 6.
-- The Rule 6 Game - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
 - Unlurk Powers - Will be re-added, with hopefully a little flair, and maybe some Discord interactions (?)
 - Websockets interact with Stagify - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
 
@@ -83,6 +82,7 @@ Planning on focusing on:
 - Twitch Welcoming users to the stream.
 - Twitch Alerts firing on OBS without 3rd party
 - Twitch Automod
+- The Rule 6 Game - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
 
 
 ## Links
