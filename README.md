@@ -50,6 +50,7 @@ The Addon (only needed if using the OBS version before the OBS Websocket Update)
 - Memory from Twitch/Discord Link - Memory is recorded in history.txt, and AI accesses this and summarises. This history is reset every half hour to preserve storage.
 - Rule 6 'Moderation' - a sub-set of Automod which will jokingly react to messages that breach rule 6.
 
+
 ### Twitch:
 - Twitch Basic Functionality - Reads and Creates Messages
 - Twitch Message Reaction - AI will respond to message when bot user is Pinged
@@ -69,7 +70,6 @@ The Addon (only needed if using the OBS version before the OBS Websocket Update)
 
 # Planning Phase 2 - Planning to Work on over April
 
-- The Rule 6 Game - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
 - Unlurk Powers - Will be re-added, with hopefully a little flair, and maybe some Discord interactions (?)
 - Websockets interact with Stagify - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
 
@@ -84,6 +84,7 @@ Planning on focusing on:
 - Twitch Welcoming users to the stream.
 - Twitch Alerts firing on OBS without 3rd party
 - Twitch Automod
+- The Rule 6 Game - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
 
 
 ## Links
@@ -108,3 +109,11 @@ V2.0.2:
 - !lurk now only registers once, and cannot be used multiple times by the same person
 - Added an !unlurk command that removes one's lurk status, note this doesn't work when someone has not lurked. 
 - Messages from users are now logged in Sheepy's memory for better context for 'history' categorisation, please note that history still has a span of half an hour, to preserve file space and privacy
+
+V2.0.3:
+- Tweaked some prompts to be a bit more specific, so that categorisation can be more correct
+- Seperated the !gpt command from the rest of the commands due to ongoing issues with such command
+- Added Twitch cooldowns for all commands and Sheepy-Bot Responses
+- Added a !raid and !feedback command
+- Added a Math and Philosophy Categorisation
+- Added Husband Wall functionality
