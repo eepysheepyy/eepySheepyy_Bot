@@ -107,3 +107,11 @@ V2.0.2:
 - !lurk now only registers once, and cannot be used multiple times by the same person
 - Added an !unlurk command that removes one's lurk status, note this doesn't work when someone has not lurked. 
 - Messages from users are now logged in Sheepy's memory for better context for 'history' categorisation, please note that history still has a span of half an hour, to preserve file space and privacy
+
+V2.0.3:
+- Tweaked some prompts to be a bit more specific, so that categorisation can be more correct
+- Seperated the !gpt command from the rest of the commands due to ongoing issues with such command
+- Added Twitch cooldowns for all commands and Sheepy-Bot Responses
+- Added a !raid and !feedback command
+- Added a Math and Philosophy Categorisation
+- Added Husband Wall functionality
