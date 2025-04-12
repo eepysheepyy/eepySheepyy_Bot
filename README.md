@@ -122,4 +122,8 @@ V2.0.4:
 - Updated Discord automod prompt to allow moderate language 
 - Updated some prompts for accuracy
 - Added Math and Philosophy categorisations for Discord
-- Added a !thoughts command 
+- Added a !thoughts command
+
+V2.0.5:
+- Beginning to transition StreamElement commands to Bot
+- Some have not yet been fully programmed due to requiring additional sources, such as Twitch API, or a points system
