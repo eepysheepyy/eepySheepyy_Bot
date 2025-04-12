@@ -117,3 +117,9 @@ V2.0.3:
 - Added a !raid and !feedback command
 - Added a Math and Philosophy Categorisation
 - Added Husband Wall functionality
+
+V2.0.4:
+- Updated Discord automod prompt to allow moderate language 
+- Updated some prompts for accuracy
+- Added Math and Philosophy categorisations for Discord
+- Added a !thoughts command 
