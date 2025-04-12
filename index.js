@@ -54,6 +54,13 @@ let cmdCooldown = false;
 let responseCooldown = false;
 let feedbackCooldown = false;
 let thoughtsCooldown = false;
+let statsCooldown = false;
+let specsCooldown = false;
+let timeCooldown = false;
+let kofiCooldown = false;
+let arriveCooldown = false;
+let jailCooldown = false;
+let patreonCooldown = false;
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_KEY, // connect to openAI using key
@@ -282,7 +289,193 @@ Twclient.on('message', async (channel, tags, message, self) => {
         connectToOBS()
         return
     }
-
+    if (message.includes("accept")){
+        // duel from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("accountage")){
+        // will require TwitchAPI
+        return
+    }
+    if (message.includes("cancelduel")){
+        // duel from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("commands")){
+        // leftover from StreamElements - remove once completed transition
+        return
+    }
+    if (message.includes("deny")){
+        // duel from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("duel")){
+        // duel from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("followage")){
+        // will require TwitchAPI
+        return
+    }
+    if (message.includes("join")){
+        // raffle from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("leaderboard")){
+        // points from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("points")){
+        // points from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("quote")){
+        // quotes from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("roulette")){
+        // roulette from streamElements - could attempt to build in the future
+        return
+    }
+    if (message.includes("uptime")){
+        // will require TwitchAPI
+        return
+    }
+    if (message.includes("vanish")){
+        // will require TwitchAPI
+        return
+    }
+    if (message.includes("watchtime")){
+        // will require TwitchAPI
+        return
+    }
+    if (message.includes("chatstats")){
+        if (statsCooldown) {
+            console.log("chatstats command ignored — still on cooldown.");
+            return; // Ignore the command during cooldown
+        }
+        Twclient.say(channel, `@${tags.username}, Here is where you can see the Chat Stats! - https://stats.StreamElements.com/c/eepySheepyy`)
+        const data = `\n @${tags.username}, Here is where you can see the Chat Stats! - https://stats.StreamElements.com/c/eepySheepyy`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            // Begin cooldown
+			statsCooldown = true;
+			setTimeout(() => {
+				statsCooldown = false;
+				console.log("chatstats command cooldown ended.");
+			}, 25000);
+        return
+    }
+    if (message.includes("specs")){
+        if (specsCooldown) {
+            console.log("specs command ignored — still on cooldown.");
+            return; // Ignore the command during cooldown
+        }
+        Twclient.say(channel, `@${tags.username}, I use a Dual PC Setup! | Gaming PC: CPU: AMD Ryzen 7 7800X3D, Motherboard: GIGABYTE B650M GAMING WIFI - DDR5, RAM: Predator Vesta II RGB 32GB (2x16GB), PRIMARY SSD: 1TB Lexar NM710 Gen4 M.2, GPU: GeForce RTX 4070 Ti SUPER OC - 16GB | Stream PC: Macbook Pro 14-Inch, M1 Pro Chip, 32 GB RAM, 500GB SSD`)
+        const data = `\n @${tags.username}, I use a Dual PC Setup! | Gaming PC: CPU: AMD Ryzen 7 7800X3D, Motherboard: GIGABYTE B650M GAMING WIFI - DDR5, RAM: Predator Vesta II RGB 32GB (2x16GB), PRIMARY SSD: 1TB Lexar NM710 Gen4 M.2, GPU: GeForce RTX 4070 Ti SUPER OC - 16GB | Stream PC: Macbook Pro 14-Inch, M1 Pro Chip, 32 GB RAM, 500GB SSD`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            // Begin cooldown
+			specsCooldown = true;
+			setTimeout(() => {
+				specsCooldown = false;
+				console.log("specs command cooldown ended.");
+			}, 25000);
+        return
+    }
+    if (message.includes("time")){
+        if (timeCooldown) {
+            console.log("time command ignored — still on cooldown.");
+            return; // Ignore the command during cooldown
+        }
+        var currentdate = new Date(); 
+        Twclient.say(channel, `@${tags.username}, the time for sheepy is: ${currentdate.getHours()}:${currentdate.getMinutes()} on ${currentdate.getDate()}/${currentdate.getMonth()+1}/${currentdate.getFullYear()}`)
+        const data = `\n @${tags.username}, the time for sheepy is: ${currentdate.getHours()}:${currentdate.getMinutes()} on ${currentdate.getDate()}/${currentdate.getMonth()+1}/${currentdate.getFullYear()}`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            // Begin cooldown
+			timeCooldown = true;
+			setTimeout(() => {
+				timeCooldown = false;
+				console.log("time command cooldown ended.");
+			}, 25000);
+        return
+    }
+    if (message.includes("kofi")){
+        if (kofiCooldown) {
+            console.log("kofi command ignored — still on cooldown.");
+            return; // Ignore the command during cooldown
+        }
+        Twclient.say(channel, `@${tags.username}, My Ko-Fi link is: https://ko-fi.com/eepysheepyy ~! You are of course, never expected to donate, as just you BEING HERE is AMAZING and APPRECIATED. But, if you really, really, REALLY do want to, you are welcome to! All funds raised will go straight towards improving quality of stream, like a new camera or something!`)
+        const data = `\n @${tags.username}, My Ko-Fi link is: https://ko-fi.com/eepysheepyy ~! You are of course, never expected to donate, as just you BEING HERE is AMAZING and APPRECIATED. But, if you really, really, REALLY do want to, you are welcome to! All funds raised will go straight towards improving quality of stream, like a new camera or something!`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            // Begin cooldown
+			kofiCooldown = true;
+			setTimeout(() => {
+				kofiCooldown = false;
+				console.log("kofi command cooldown ended.");
+			}, 25000);
+        return
+    }
+    if (message.includes("arrive")){
+        if (arriveCooldown) {
+            console.log("arrive command ignored — still on cooldown.");
+            return; // Ignore the command during cooldown
+        }
+        Twclient.say(channel, `@${tags.username} bursts into the building, breaking the door off it's hinges-`)
+        const data = `\n @${tags.username} bursts into the building, breaking the door off it's hinges-`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            // Begin cooldown
+			arriveCooldown = true;
+			setTimeout(() => {
+				arriveCooldown = false;
+				console.log("arrive command cooldown ended.");
+			}, 25000);
+        return
+    }
+    if (message.includes("jail")){
+        if (jailCooldown) {
+            console.log("jail command ignored — still on cooldown.");
+            return; // Ignore the command during cooldown
+        }
+        Twclient.say(channel, `@${tags.username} has been placed behind bars by the chat, forever banished to the abyss beyond.`)
+        const data = `\n @${tags.username} has been placed behind bars by the chat, forever banished to the abyss beyond.`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            // Begin cooldown
+			jailCooldown = true;
+			setTimeout(() => {
+				jailCooldown = false;
+				console.log("jail command cooldown ended.");
+			}, 25000);
+        return
+    }
+    if (message.includes("patreon")){
+        if (patreonCooldown) {
+            console.log("patreon command ignored — still on cooldown.");
+            return; // Ignore the command during cooldown
+        }
+        Twclient.say(channel, `@${tags.username} We have started a Patreon for experimentation purposes, and yes, you can get extra tidbits and rewards even by just becoming a member for free! There is of course, completely optional paid tiers with more benefits, but even just being a member is of course, appreciated <3 - https://www.patreon.com/eepySheepyy`)
+        const data = `\n @${tags.username} We have started a Patreon for experimentation purposes, and yes, you can get extra tidbits and rewards even by just becoming a member for free! There is of course, completely optional paid tiers with more benefits, but even just being a member is of course, appreciated <3 - https://www.patreon.com/eepySheepyy`
+            fs.appendFile('history.txt', data, (err) => {
+                if (err) throw err;
+            })
+            // Begin cooldown
+			patreonCooldown = true;
+			setTimeout(() => {
+				patreonCooldown = false;
+				console.log("patreon command cooldown ended.");
+			}, 25000);
+        return
+    }
     if (message.includes("hug ")){
         if (hugCooldown) {
             console.log("hug command ignored — still on cooldown.");
@@ -382,7 +575,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
             return; // Ignore the command during cooldown
         }
         Twclient.say(channel, "SHEEP RAID <3 The Sheep have arrived! We bear hugs, cuddles and snuggles! Only the comfiest of cozy vibes we share, but of our sillyness and chaos beware! SHEEP RAID <3");
-        const data = `\n `
+        const data = `\n SHEEP RAID <3 The Sheep have arrived! We bear hugs, cuddles and snuggles! Only the comfiest of cozy vibes we share, but of our sillyness and chaos beware! SHEEP RAID <3`
         fs.appendFile('history.txt', data, (err) => {
             if (err) throw err;
         })
