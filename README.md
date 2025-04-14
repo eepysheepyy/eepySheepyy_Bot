@@ -127,3 +127,8 @@ V2.0.4:
 V2.0.5:
 - Beginning to transition StreamElement commands to Bot
 - Some have not yet been fully programmed due to requiring additional sources, such as Twitch API, or a points system
+
+V2.0.6:
+- Added a !disconnect command for internal use of OBS Websockets, so that it limits issues with logging in and out of OBS remotely
+- Made a failsafe for Discord replies that the bot responds to that are deleted before it replies, so now, if it can't reply directly, it sends a message and no longer crashes
+- Slight prompt touch ups for Automod
