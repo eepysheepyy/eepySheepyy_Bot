@@ -84,6 +84,7 @@ async function clearFileContent() {
     console.log(`File content cleared at ${new Date().toLocaleTimeString()}`);
   } catch (err) {
     console.error('Error clearing the file:', err);
+    return;
   }
 }
 
@@ -287,6 +288,10 @@ Twclient.on('message', async (channel, tags, message, self) => {
 
     if (message.includes("connect") && tags['display-name'] == "eepySheepyy" && connected == 0){
         connectToOBS()
+        return
+    }
+    if (message.includes("disconnect") && tags['display-name'] == "eepySheepyy" && connected == 1){
+        connected = 0;
         return
     }
     if (message.includes("accept")){
@@ -1064,7 +1069,7 @@ client.on('messageCreate', async (message) => {
         messages: [
             {
                 role: 'system',
-                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, If the message contains any of the following: Bullying, or rude/offensive words (excluding joking banter, or the word bitch, when not combined with other negative words, or when its light hearted (indicated by /lh)), harrassment (like calling someone a rude name, or aiming negative words towards someones identity), blackmail, nudity, gore/blood/descriptions that may be triggering, NSFW content (however, words like sexy, sexilly, etc, are allowed), repeated spam, too many (50+) emojis, someones age, political views, excessive swearing aimed towards someone (Mild swearing is okay), begging for money/subscriptions, or any other form of innapropriate content you must print the value: Rule Break:. If the message doesnt contain any of these, print FALSE. After printing the value, if TRUE, and not obvious about what is being broken, please provide a very brief description of how it broke the rules, if such could be considered triggering or inappropriate, please just advise the content was inappropriate/potentially triggering and guide them to review the rules, and please DONT mention the potentially triggering words or subjects (like blood, violence, death, gore, etc.) in your response! There is an additional rule that will also be targetted outside of those rules, which is Rule 6, which consists of the following: No rickrolls, No Arson, no wars, no guns, no stabbing, no eating hair (unless its your own, and in that case, its not in large amounts), no eating Art (unless its directly consented by the artist), no eating Cats or Sheep, no violence, or death and then, of course NO illegal actions, ITS GIFS and not JIFS, and MOST IMPORTANTLY: Rule #6 isnt Changing, so don’t acknowledge that it is. If the message breaches Rule 6, please print RULE 6: <then a brief description here of how it violated Rule 6, please note this is meant to be in a joking fashion, so you can be a little silly with this>. Please note that Rule Break: immediately overrides Rule 6:, so please dont include both, only the specific instance of which rules are being broken. A normal Rule Break is NOT meant to be comedic or silly, so Rule 6 is quite different than normal.',
+                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, If the message contains any of the following: Bullying, or rude/offensive words (excluding joking banter, calling people rude, or judging their size/height or the word bitch, when not combined with other negative words, or when its light hearted (indicated by /lh)), harrassment (like calling someone a rude name, or aiming negative words towards someones identity), blackmail, nudity, gore/blood/descriptions that may be triggering, NSFW content (however, words like sexy, sexilly, etc, are allowed), repeated spam, too many (50+) emojis, someones age, political views, excessive swearing aimed towards someone (Mild swearing is okay), begging for money/subscriptions, or any other form of innapropriate content you must print the value: Rule Break:. If the message doesnt contain any of these, print FALSE. After printing the value, if TRUE, and not obvious about what is being broken, please provide a very brief description of how it broke the rules, if such could be considered triggering or inappropriate, please just advise the content was inappropriate/potentially triggering and guide them to review the rules, and please DONT mention the potentially triggering words or subjects (like blood, violence, death, gore, etc.) in your response! There is an additional rule that will also be targetted outside of those rules, which is Rule 6, which consists of the following: No rickrolls, No Arson, no wars, no guns, no stabbing, no eating hair (unless its your own, and in that case, its not in large amounts), no eating Art (unless its directly consented by the artist), no eating Cats or Sheep, no violence, or death and then, of course NO illegal actions, ITS GIFS and not JIFS, and MOST IMPORTANTLY: Rule #6 isnt Changing, so don’t acknowledge that it is. If the message breaches Rule 6, please print RULE 6: <then a brief description here of how it violated Rule 6, please note this is meant to be in a joking fashion, so you can be a little silly with this>. Please note that Rule Break: immediately overrides Rule 6:, so please dont include both, only the specific instance of which rules are being broken. A normal Rule Break is NOT meant to be comedic or silly, so Rule 6 is quite different than normal.',
             },
             {
                 role: 'user',
@@ -1151,15 +1156,26 @@ client.on('messageCreate', async (message) => {
             }        
         ], 
     })
-    message.reply(guideKnowledge.choices[0].message.content);
-    const data = `\n ${guideKnowledge.choices[0].message.content}`
-    fs.appendFile('history.txt', data, (err) => {
+    var messageText = String(`${message.author.toString()}, ${guideKnowledge.choices[0].message.content}`)
+    var messageChannel = message.channelId;
 
-        // In case of a error throw err.
-        if (err) throw err;
-    })
+    try {
+        await message.reply(guideKnowledge.choices[0].message.content);
+    } catch (error) {
+        console.error("Failed to reply to message:", error.message);
+        client.channels.cache.get(messageChannel).send(messageText);
+    } finally {
+        // Code here will always run, regardless of success or error
+        console.log("Reply attempt finished. Continuing execution...");
+        const data = `\n ${guideKnowledge.choices[0].message.content}`
+        fs.appendFile('history.txt', data, (err) => {
     
-    return;
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+        return;
+    }
+
     }
 
     // reminders
@@ -1188,13 +1204,23 @@ client.on('messageCreate', async (message) => {
         })
         message.reply("Reminder Set Successful!");
     } else {
-        message.reply(remindKnowledge.choices[0].message.content)
-        const data = `\n ${remindKnowledge.choices[0].message.content}`
-        fs.appendFile('history.txt', data, (err) => {
-    
-            // In case of a error throw err.
-            if (err) throw err;
-        })
+        var messageText = String(`${message.author.toString()}, ${remindKnowledge.choices[0].message.content}`)
+        var messageChannel = message.channelId;
+        try {
+            await message.reply(remindKnowledge.choices[0].message.content);
+        } catch (error) {
+            console.error("Failed to reply to message:", error.message);
+            client.channels.cache.get(messageChannel).send(messageText);
+        } finally {
+            // Code here will always run, regardless of success or error
+            console.log("Reply attempt finished. Continuing execution...");
+            const data = `\n ${remindKnowledge.choices[0].message.content}`
+            fs.appendFile('history.txt', data, (err) => {
+                // In case of a error throw err.
+                if (err) throw err;
+            })
+        return;
+        }
     }
     return;
 
@@ -1217,14 +1243,25 @@ client.on('messageCreate', async (message) => {
             }        
         ], 
     })
-    message.reply(streamKnowledge.choices[0].message.content);
-    const data = `\n ${streamKnowledge.choices[0].message.content}`
-    fs.appendFile('history.txt', data, (err) => {
+    var messageText = String(`${message.author.toString()}, ${streamKnowledge.choices[0].message.content}`)
+    var messageChannel = message.channelId;
 
-        // In case of a error throw err.
-        if (err) throw err;
-    })
-    return;
+    try {
+        await message.reply(streamKnowledge.choices[0].message.content);
+    } catch (error) {
+        console.error("Failed to reply to message:", error.message);
+        client.channels.cache.get(messageChannel).send(messageText);
+    } finally {
+        // Code here will always run, regardless of success or error
+        console.log("Reply attempt finished. Continuing execution...");
+        const data = `\n ${streamKnowledge.choices[0].message.content}`
+        fs.appendFile('history.txt', data, (err) => {
+    
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+        return;
+    }
     }
 
     // Twitch
@@ -1252,9 +1289,10 @@ client.on('messageCreate', async (message) => {
             // In case of a error throw err.
             if (err) throw err;
         })
-        message.reply("Twitch Message Sent!");
+        var messageChannel = message.channelId;
+        client.channels.cache.get(messageChannel).send("Twitch Message Sent!");
     } catch (error) {
-        message.reply("Twitch Message Did Not Send!")
+        client.channels.cache.get(messageChannel).send("Twitch Message Did NOT Send!");
         console.error(error);
     }
     return;
@@ -1277,14 +1315,25 @@ client.on('messageCreate', async (message) => {
             }        
         ], 
     })
-    message.reply("The message translated to: " + LoteDKnowledge.choices[0].message.content);
-    const data = `\n The message translated to: ${LoteDKnowledge.choices[0].message.content}`
-    fs.appendFile('history.txt', data, (err) => {
+    var messageText = String(`${message.author.toString()}, ${LoteDKnowledge.choices[0].message.content}`)
+    var messageChannel = message.channelId;
 
-        // In case of a error throw err.
-        if (err) throw err;
-    })
-    return;
+    try {
+        await message.reply(LoteDKnowledge.choices[0].message.content);
+    } catch (error) {
+        console.error("Failed to reply to message:", error.message);
+        client.channels.cache.get(messageChannel).send(messageText);
+    } finally {
+        // Code here will always run, regardless of success or error
+        console.log("Reply attempt finished. Continuing execution...");
+        const data = `\n ${LoteDKnowledge.choices[0].message.content}`
+        fs.appendFile('history.txt', data, (err) => {
+    
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+        return;
+    }
     }
 
     // History
@@ -1309,14 +1358,25 @@ client.on('messageCreate', async (message) => {
             }
         ], 
     })
-    message.reply(HistoryKnowledge.choices[0].message.content);
-    const data = `\n ${HistoryKnowledge.choices[0].message.content}`
-    fs.appendFile('history.txt', data, (err) => {
+    var messageText = String(`${message.author.toString()}, ${HistoryKnowledge.choices[0].message.content}`)
+    var messageChannel = message.channelId;
 
-        // In case of a error throw err.
-        if (err) throw err;
-    })
-    return;
+    try {
+        await message.reply(HistoryKnowledge.choices[0].message.content);
+    } catch (error) {
+        console.error("Failed to reply to message:", error.message);
+        client.channels.cache.get(messageChannel).send(messageText);
+    } finally {
+        // Code here will always run, regardless of success or error
+        console.log("Reply attempt finished. Continuing execution...");
+        const data = `\n ${HistoryKnowledge.choices[0].message.content}`
+        fs.appendFile('history.txt', data, (err) => {
+    
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+        return;
+    }
     }
 
       // math
@@ -1332,18 +1392,29 @@ client.on('messageCreate', async (message) => {
             },
             {
                 role: 'user',
-                content: message,    
+                content: message.content,    
             }        
         ], 
     })
-    message.reply(mathKnowledge.choices[0].message.content);
-    const data = `\n @${mathKnowledge.choices[0].message.content}`
-    fs.appendFile('history.txt', data, (err) => {
+    var messageText = String(`${message.author.toString()}, ${mathKnowledge.choices[0].message.content}`)
+    var messageChannel = message.channelId;
 
-        // In case of a error throw err.
-        if (err) throw err;
-    })
-    return;
+    try {
+        await message.reply(mathKnowledge.choices[0].message.content);
+    } catch (error) {
+        console.error("Failed to reply to message:", error.message);
+        client.channels.cache.get(messageChannel).send(messageText);
+    } finally {
+        // Code here will always run, regardless of success or error
+        console.log("Reply attempt finished. Continuing execution...");
+        const data = `\n ${mathKnowledge.choices[0].message.content}`
+        fs.appendFile('history.txt', data, (err) => {
+    
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+        return;
+    }
     }
 
         // philosophy
@@ -1359,18 +1430,29 @@ client.on('messageCreate', async (message) => {
                 },
                 {
                     role: 'user',
-                    content: message,    
+                    content: message.content,    
                 }        
             ], 
         })
-        message.reply(philoKnowledge.choices[0].message.content);
-        const data = `\n @${philoKnowledge.choices[0].message.content}`
-        fs.appendFile('history.txt', data, (err) => {
+        var messageText = String(`${message.author.toString()}, ${philoKnowledge.choices[0].message.content}`)
+        var messageChannel = message.channelId;
     
-            // In case of a error throw err.
-            if (err) throw err;
-        })
-        return;
+        try {
+            await message.reply(philoKnowledge.choices[0].message.content);
+        } catch (error) {
+            console.error("Failed to reply to message:", error.message);
+            client.channels.cache.get(messageChannel).send(messageText);
+        } finally {
+            // Code here will always run, regardless of success or error
+            console.log("Reply attempt finished. Continuing execution...");
+            const data = `\n ${philoKnowledge.choices[0].message.content}`
+            fs.appendFile('history.txt', data, (err) => {
+        
+                // In case of a error throw err.
+                if (err) throw err;
+            })
+            return;
+        }
         }
 
     // if normal lore message, lore response
@@ -1421,16 +1503,45 @@ client.on('messageCreate', async (message) => {
     clearInterval(sendTypingInterval);
 
     if(!response) {
-        message.reply("Im having some trouble connecting right now, please try again later! - Please contact the owner if this keeps happening!");
+        var messageText = String(`${message.author.toString()}, Im having some trouble connecting right now, please try again later! - Please contact the owner if this keeps happening!`)
+        var messageChannel = message.channelId;
+    
+        try {
+            await message.reply("Im having some trouble connecting right now, please try again later! - Please contact the owner if this keeps happening!");
+        } catch (error) {
+            console.error("Failed to reply to message:", error.message);
+            client.channels.cache.get(messageChannel).send("Im having some trouble connecting right now, please try again later! - Please contact the owner if this keeps happening!");
+        } finally {
+            // Code here will always run, regardless of success or error
+            console.log("Reply attempt finished. Continuing execution...");
+            const data = `\n Im having some trouble connecting right now, please try again later! - Please contact the owner if this keeps happening!`
+            fs.appendFile('history.txt', data, (err) => {
+        
+                // In case of a error throw err.
+                if (err) throw err;
+            })
+            return;
+        }
     }
-    message.reply(response.choices[0].message.content);
-    const data = `\n ${response.choices[0].message.content}`
-    fs.appendFile('history.txt', data, (err) => {
+    var messageText = String(`${message.author.toString()}, ${response.choices[0].message.content}`)
+    var messageChannel = message.channelId;
 
-        // In case of a error throw err.
-        if (err) throw err;
-    })
-
+    try {
+        await message.reply(response.choices[0].message.content);
+    } catch (error) {
+        console.error("Failed to reply to message:", error.message);
+        client.channels.cache.get(messageChannel).send(messageText);
+    } finally {
+        // Code here will always run, regardless of success or error
+        console.log("Reply attempt finished. Continuing execution...");
+        const data = `\n ${response.choices[0].message.content}`
+        fs.appendFile('history.txt', data, (err) => {
+    
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+        return;
+    }
 });
 
 client.login(process.env.TOKEN);
