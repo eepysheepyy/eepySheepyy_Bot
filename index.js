@@ -75,7 +75,7 @@ const Twclient = new tmi.Client({
 	channels: [ 'eepySheepyy' ]
 });
 
-const clearIntervalTime = 1800000; // Time interval in milliseconds (e.g., 5000ms = 5 seconds)
+const clearIntervalTime = 1200000; // Time interval in milliseconds (e.g., 5000ms = 5 seconds)
 
 async function clearFileContent() {
   try {
@@ -198,9 +198,10 @@ Twclient.on('message', async (channel, tags, message, self) => {
                })
                return
            }
+           var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
             const lurkText = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -209,7 +210,11 @@ Twclient.on('message', async (channel, tags, message, self) => {
             {
                 role: 'user',
                 content: message,    
-            }        
+            },
+            {
+                role: 'user',
+                content: emoteSet,
+            }
         ], 
     })
     Twclient.say(channel, `@${tags.username}, ${lurkText.choices[0].message.content}`);
@@ -544,9 +549,10 @@ Twclient.on('message', async (channel, tags, message, self) => {
             console.log("gpt command ignored — still on cooldown.");
             return; // Ignore the command during cooldown
         }
+        var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
         const gptText = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -555,6 +561,10 @@ Twclient.on('message', async (channel, tags, message, self) => {
             {
                 role: 'user',
                 content: message,    
+            }, 
+            {
+                role: 'user',
+                content: emoteSet,
             }        
         ], 
     })
@@ -614,9 +624,11 @@ Twclient.on('message', async (channel, tags, message, self) => {
             console.log("thoughts command ignored — still on cooldown.");
             return; // Ignore the command during cooldown
         }
+        var Doctext = fs.readFileSync("history.txt").toString('utf-8');
+        var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
         const thoughtText = await openai.chat.completions
         .create({
-            model: 'gpt-4o-mini', 
+            model: 'gpt-4.1-mini', 
             messages: [
                 {
                     role: 'system',
@@ -625,7 +637,15 @@ Twclient.on('message', async (channel, tags, message, self) => {
                 {
                     role: 'user',
                     content: message,    
-                }        
+                },
+                {
+                    role: 'user',
+                    content: `Please also consider this context: ${Doctext}`,
+                },       
+                {
+                    role: 'user',
+                    content: emoteSet,
+                }
             ], 
         })
         console.log(thoughtText.choices[0].message.content)
@@ -649,9 +669,11 @@ Twclient.on('message', async (channel, tags, message, self) => {
         console.log("command ignored — still on cooldown.");
         return; // Ignore the command during cooldown
     }
+    var Doctext = fs.readFileSync("history.txt").toString('utf-8');
+    var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
         const TwCheck = await openai.chat.completions 
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -660,6 +682,14 @@ Twclient.on('message', async (channel, tags, message, self) => {
             {
                 role: 'user',
                 content: message,    
+            },
+            {
+                role: 'user',
+                content: `Please also consider this context: ${Doctext}`, 
+            },
+            {
+                role: 'user',
+                content: emoteSet,
             }        
         ], 
     })
@@ -690,11 +720,11 @@ Twclient.on('message', async (channel, tags, message, self) => {
 
         const checkTwEnquiry = await openai.chat.completions // categorisation system - twitch
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
-                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, if relating to: Branding, Streams, Streaming tools/Resources, Twitch, Youtube, or other Social Media/information to do with eepySheepyy, print STREAMS. If relating to lore, responding to a message, sending a message response, or just normal conversational enquiries, or anything to do with Sheepys character, print LORE. If relating to reminders, (such as setting a reminder) print REMINDERS. If relating to Discord, Rules, Commands or other guidelines, plese print GUIDE, if the message SPECIFICALLY states to send a message to Discord, please print DISCORD, if the message is in a language other than English and requires translation, please print LOTE , if enquiry is in regard to what has been going on with you, or what you have said, or what someone has missed from you, please print HISTORY. If a message is a mathmatical equation, please print MATH. And if the message is asking or probing into a philosophical or deep matter, please print PHILO',
+                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, if relating to: Branding, Streams, Streaming tools/Resources, Twitch, Youtube, or other Social Media/information to do with eepySheepyy, print STREAMS. If relating to lore, responding to a message, sending a message response, or just normal conversational enquiries, or anything to do with Sheepys character, print LORE. If relating to reminders, (such as setting a reminder) print REMINDERS. If relating to Discord, Rules, Commands or other guidelines, plese print GUIDE, if the message SPECIFICALLY states to send a message TO Discord (and NOT just to say/send/respond to a normal word), please print DISCORD, if the message is in a language other than English and requires translation, please print LOTE , if enquiry is in regard to what has been going on with you, or what you have said, or what someone has missed from you, please print HISTORY. If a message is a mathmatical equation, please print MATH. And if the message is asking or probing into a philosophical or deep matter, please print PHILO',
             },
             {
                 role: 'user',
@@ -707,18 +737,28 @@ Twclient.on('message', async (channel, tags, message, self) => {
     // guide
 
     if (checkTwEnquiry.choices[0].message.content.includes("GUIDE")) {
+        var Doctext = fs.readFileSync("history.txt").toString('utf-8');
+        var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
         const guideTwKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
-                content: 'You are a helpful assistant that helps with relaying information about eepySheepyys commands, rules, and discord information, The rules are as follows: Bullying, Harassment, blackmail, etc. is NOT accepted, No innappropriate works/content of any kind, no spam or self-promo, Dont share personal information, like age,  No political chat, Mild swearing is okay, as long as its not directed at someone in a way that would hurt them in anyway, No begging for money/reactions, treat everyone fairly, avoiding triggering topics, keeping appropriate for ages 15+, and no spoilers or backseating. For commands, please advise to use !cmd, and for the discord, you can send them to: discord.gg/BqZKzcwUVH',
+                content: 'You are a helpful assistant that helps with relaying information about eepySheepyys commands, rules, and discord information, The rules are as follows: Bullying, Harassment, blackmail, etc. is NOT accepted, No innappropriate works/content of any kind, no spam or self-promo, Dont share personal information, like age,  No political chat, Mild swearing is okay, as long as its not directed at someone in a way that would hurt them in anyway, No begging for money/reactions, treat everyone fairly, avoiding triggering topics, keeping appropriate for ages 15+, and no spoilers or backseating. For advise about commands, please advise to use !cmd, and for the discord (when requested), you can send them to: discord.gg/BqZKzcwUVH. Try and keep short, sweet and straight to the point!',
             },
             {
                 role: 'user',
                 content: message,    
-            }        
+            },        
+            {
+                role: 'user',
+                content: `Please also consider this context: ${Doctext}`,
+            },
+            {
+                user: 'user',
+                content: emoteSet,
+            }
         ], 
     })
     Twclient.say(channel, `@${tags.username} ${guideTwKnowledge.choices[0].message.content}`);
@@ -739,18 +779,29 @@ Twclient.on('message', async (channel, tags, message, self) => {
     // streams
 
     if (checkTwEnquiry.choices[0].message.content.includes("STREAMS")) {
+        var Doctext = fs.readFileSync("history.txt").toString('utf-8');
+        var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
         const streamTwKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
-                content: 'You are a helpful assistant that helps with relaying information about eepySheepyys streams, answering the provided enquiry as best as you can to your knowledge that is here: eepysheepyy streams on Twitch, he prefers being called Sheep or Sheepy, he is based Australia, in Queensland! He is an autistic adult who enjoys things like Pokemon, Indie Games, Board Games, Card Games and general Nerdy stuff, as well as books (reading and writing) and storytelling through different media formats. He loves to have fun with his audience, and strives to meet the goals of creating a positive and inclusive space for all, whilst trying to connect to each and every one of you. He loves to banter, and joke around, but can of course, have some serious conversations too, including on topics such as mental health and advocacy. He mainly does content such as Just Chatting, Indie Games, Adventure Games and everything in between! People tend to call him a Chaotic Cozy Streamer due to his strange antics, whilst being mostly chill. Please note that all platforms are Inclusive Safe Spaces; which means that we are accepting of all, regardless of gender, sexuality, neurodivergence, culture, etc. No putting down, attacking, harassment or discrimination. Please be respectful of everyones opinions, thoughts and individuality! For more information, you can provide: eepysheepyy.com, or a link with all available socials: linktr.ee/eepysheepyy , for youtube enquiries, please advise that content on that side is a work in progress, but feel free to guide to www.youtube.com/@eepysheepyy or here (for all stream VODs) www.youtube.com/@eepysheepyyvods , if the enquiry is to do with stream resources, or whats used on stream, please guide to here: docs.google.com/document/d/15iCyIvW7giean7e7M-FoxJfCkJ4bYSfk5l3VfZREbUQ/edit?usp=sharing ',
+                content: 'You are a helpful assistant that helps with relaying information about eepySheepyys streams, answering the provided enquiry as best as you can to your knowledge that is here: eepysheepyy streams on Twitch, he prefers being called Sheep or Sheepy, he is based Australia, in Queensland! He is an autistic adult who enjoys things like Pokemon, Indie Games, Board Games, Card Games and general Nerdy stuff, as well as books (reading and writing) and storytelling through different media formats. He loves to have fun with his audience, and strives to meet the goals of creating a positive and inclusive space for all, whilst trying to connect to each and every one of you. He loves to banter, and joke around, but can of course, have some serious conversations too, including on topics such as mental health and advocacy. He mainly does content such as Just Chatting, Indie Games, Adventure Games and everything in between! People tend to call him a Chaotic Cozy Streamer due to his strange antics, whilst being mostly chill. Please note that all platforms are Inclusive Safe Spaces; which means that we are accepting of all, regardless of gender, sexuality, neurodivergence, culture, etc. No putting down, attacking, harassment or discrimination. Please be respectful of everyones opinions, thoughts and individuality! For more information, you can provide: eepysheepyy.com, or a link with all available socials: linktr.ee/eepysheepyy , for youtube enquiries, please advise that content on that side is a work in progress, but feel free to guide to www.youtube.com/@eepysheepyy or here (for all stream VODs) www.youtube.com/@eepysheepyyvods , if the enquiry is to do with stream resources, or whats used on stream, please guide to here: docs.google.com/document/d/15iCyIvW7giean7e7M-FoxJfCkJ4bYSfk5l3VfZREbUQ/edit?usp=sharing. Please keep this SHORT, around 2 sentences long to only answer the question asked! No need to info dump! ',
             },
             {
                 role: 'user',
                 content: message,    
-            }        
+            },
+            {
+                role: 'user',
+                content: `Please also consider this context: ${Doctext}`, 
+            },
+            {
+                role: 'user',
+                content: emoteSet,
+            }
+
         ], 
     })
     Twclient.say(channel, `@${tags.username} ${streamTwKnowledge.choices[0].message.content}`);
@@ -772,11 +823,11 @@ Twclient.on('message', async (channel, tags, message, self) => {
     if (checkTwEnquiry.choices[0].message.content.includes("REMINDERS")) {
         const remindTwKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
-                content: 'You are a helpful assistant that helps with relaying information about a requested reminder, as long as you have enough information to do so, your job is to write a sentence in the following format: Reminder SET: <event> (brief description), to be completed by (Time), where <event> is the event that is being reminded, a brief description is obviously a small, around sentence long description of the task, and the time is set for when is specified, Please note that you dont need specific dates/days of the week, unless specifically requested by the user, for example, today at 2pm can work. If you dont have enough information, please dont write this format, and request the reminder enquiry to be sent again, and explain whats missing. Please dont be too harsh with this. ',
+                content: 'You are a helpful assistant that helps with relaying information about a requested reminder, your job is to write a sentence in the following format: Reminder SET: <event> (brief description), where <event> is the event that is being reminded, a brief description is obviously a small, around sentence long description of the task. Please note that you dont need specific dates/days of the week, unless specifically requested by the user, for example, today at 2pm can work, and add that at the end!',
             },
             {
                 role: 'user',
@@ -816,7 +867,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
     if (checkTwEnquiry.choices[0].message.content.includes("DISCORD")) {
         const DiscordTwKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -830,7 +881,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
     })
     const DiscordSend = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -874,7 +925,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
     if (checkTwEnquiry.choices[0].message.content.includes("LOTE")) {
         const LoteKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -904,10 +955,10 @@ Twclient.on('message', async (channel, tags, message, self) => {
     // History
         if (checkTwEnquiry.choices[0].message.content.includes("HISTORY")) {
             var Doctext = fs.readFileSync("history.txt").toString('utf-8');
-            console.log(Doctext)
+            var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
             const HistoryTwKnowledge = await openai.chat.completions
         .create({
-            model: 'gpt-4o-mini', 
+            model: 'gpt-4.1-mini', 
             messages: [
                 {
                     role: 'system',
@@ -920,6 +971,10 @@ Twclient.on('message', async (channel, tags, message, self) => {
                 {
                     role: 'user',
                     content: message,
+                },
+                {
+                    role: 'user',
+                    content: emoteSet,
                 }
             ], 
         })
@@ -943,7 +998,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
     if (checkTwEnquiry.choices[0].message.content.includes("MATH")) {
         const mathTwKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -973,9 +1028,11 @@ Twclient.on('message', async (channel, tags, message, self) => {
     // philosophy
 
     if (checkTwEnquiry.choices[0].message.content.includes("PHILO")) {
+        var Doctext = fs.readFileSync("history.txt").toString('utf-8');
+        var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
         const philoTwKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -984,7 +1041,15 @@ Twclient.on('message', async (channel, tags, message, self) => {
             {
                 role: 'user',
                 content: message,    
-            }        
+            },        
+            {
+                role: 'user',
+                content: `Please also consider this context: ${Doctext}`,
+            },
+            {
+                role: 'user',
+                content: emoteSet,
+            }
         ], 
     })
     Twclient.say(channel, `@${tags.username} ${philoTwKnowledge.choices[0].message.content}`);
@@ -1003,9 +1068,10 @@ Twclient.on('message', async (channel, tags, message, self) => {
     }
 
     // lore
-
+    var Doctext = fs.readFileSync("history.txt").toString('utf-8');
+    var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
     const streamLoreKnowledge = await openai.chat.completions.create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -1014,7 +1080,15 @@ Twclient.on('message', async (channel, tags, message, self) => {
             {
                 role: 'user',
                 content: message,    
-            }        
+            },       
+            {
+                role: 'user',
+                content: `Please also consider this context: ${Doctext}`,
+            },
+            {
+                role: 'user',
+                content: emoteSet,
+            }
         ], 
     })
     Twclient.say(channel, `@${tags.username} ${streamLoreKnowledge.choices[0].message.content}`);
@@ -1065,11 +1139,11 @@ client.on('messageCreate', async (message) => {
     console.log("Starting Automod check!")
     const automod = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
-                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, If the message contains any of the following: Bullying, or rude/offensive words (excluding joking banter, calling people rude, or judging their size/height or the word bitch, when not combined with other negative words, or when its light hearted (indicated by /lh)), harrassment (like calling someone a rude name, or aiming negative words towards someones identity), blackmail, nudity, gore/blood/descriptions that may be triggering, NSFW content (however, words like sexy, sexilly, etc, are allowed), repeated spam, too many (50+) emojis, someones age, political views, excessive swearing aimed towards someone (Mild swearing is okay), begging for money/subscriptions, or any other form of innapropriate content you must print the value: Rule Break:. If the message doesnt contain any of these, print FALSE. After printing the value, if TRUE, and not obvious about what is being broken, please provide a very brief description of how it broke the rules, if such could be considered triggering or inappropriate, please just advise the content was inappropriate/potentially triggering and guide them to review the rules, and please DONT mention the potentially triggering words or subjects (like blood, violence, death, gore, etc.) in your response! There is an additional rule that will also be targetted outside of those rules, which is Rule 6, which consists of the following: No rickrolls, No Arson, no wars, no guns, no stabbing, no eating hair (unless its your own, and in that case, its not in large amounts), no eating Art (unless its directly consented by the artist), no eating Cats or Sheep, no violence, or death and then, of course NO illegal actions, ITS GIFS and not JIFS, and MOST IMPORTANTLY: Rule #6 isnt Changing, so don’t acknowledge that it is. If the message breaches Rule 6, please print RULE 6: <then a brief description here of how it violated Rule 6, please note this is meant to be in a joking fashion, so you can be a little silly with this>. Please note that Rule Break: immediately overrides Rule 6:, so please dont include both, only the specific instance of which rules are being broken. A normal Rule Break is NOT meant to be comedic or silly, so Rule 6 is quite different than normal.',
+                content: 'You are a Message Checker Terminal, your soul purpose is to check the intent of a message thats input, and respond with an according value, If the message contains any of the following: Bullying, or rude/offensive words (excluding joking banter, calling people rude, or judging their size/height or the word bitch, when not combined with other negative words, or when its light hearted (indicated by /lh)), harrassment (like calling someone a offensive name, or aiming really negative words towards someones identity [Please know we have a lot of neurodiverse people in our community, so terms like: Autistic, and etc can be used, however, not combined with negative/derogatory words that can be offensive.]), blackmail, nudity, gore/blood/descriptions that may be triggering, NSFW content (however, words like sexy, sexilly, etc, are allowed), repeated spam, someones age, political views, excessive swearing aimed towards someone (Mild swearing is okay), begging for money/subscriptions, or any other form of innapropriate content you must print the value: Rule Break:. If the message doesnt contain any of these, print FALSE. After printing the value, if TRUE, and not obvious about what is being broken, please provide a very brief description of how it broke the rules, if such could be considered triggering or inappropriate, please just advise the content was inappropriate/potentially triggering and guide them to review the rules, and please DONT mention the potentially triggering words or subjects (like blood, violence, death, gore, etc.) in your response! There is an additional rule that will also be targetted outside of those rules, which is Rule 6, which consists of the following: No rickrolls, No Arson, no wars, no guns, no stabbing, no eating hair (unless its your own, and in that case, its not in large amounts), no eating Art (unless its directly consented by the artist), no eating Cats or Sheep, no violence, or death and then, of course NO illegal actions, ITS GIFS and not JIFS, and MOST IMPORTANTLY: Rule #6 isnt Changing, so don’t acknowledge that it is. If the message breaches Rule 6, please print RULE 6: <then a brief description here of how it violated Rule 6, please note this is meant to be in a joking fashion, so you can be a little silly with this>. Please note that Rule Break: immediately overrides Rule 6:, so please dont include both, only the specific instance of which rules are being broken. A normal Rule Break is NOT meant to be comedic or silly, so Rule 6 is quite different than normal.',
             },
             {
                 role: 'user',
@@ -1125,7 +1199,7 @@ client.on('messageCreate', async (message) => {
     console.log("Enquiry passed!")
     const checkEnquiry = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -1142,9 +1216,10 @@ client.on('messageCreate', async (message) => {
     // guide
 
     if (checkEnquiry.choices[0].message.content.includes("GUIDE")) {
+        var Doctext = fs.readFileSync("history.txt").toString('utf-8');
         const guideKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -1153,6 +1228,10 @@ client.on('messageCreate', async (message) => {
             {
                 role: 'user',
                 content: message.content,    
+            },
+            {
+                role: 'user',
+                content: `Please also consider this context: ${Doctext}`,
             }        
         ], 
     })
@@ -1182,11 +1261,11 @@ client.on('messageCreate', async (message) => {
     if (checkEnquiry.choices[0].message.content.includes("REMINDERS") && (message.member.permissionsIn(message.channel).has("Administrator"))) {
         const remindKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
-                content: 'You are a helpful assistant that helps with relaying information about a requested reminder, as long as you have enough information to do so, your job is to write a sentence in the following format: Reminder SET: <event> (brief description), to be completed by (Time), where <event> is the event that is being reminded, a brief description is obviously a small, around sentence long description of the task, and the time is set for when is specified, Please note that you dont need specific dates/days of the week, unless specifically requested by the user, for example, today at 2pm can work. If you dont have enough information, please dont write this format, and request the reminder enquiry to be sent again, and explain whats missing. Please dont be too harsh with this. ',
+                content: 'You are a helpful assistant that helps with relaying information about a requested reminder, your job is to write a sentence in the following format: Reminder SET: <event> (brief description), where <event> is the event that is being reminded, a brief description is obviously a small, around sentence long description of the task, Please note that you dont need specific dates/days of the week, unless specifically requested by the user, for example, today at 2pm can work.',
             },
             {
                 role: 'user',
@@ -1229,9 +1308,10 @@ client.on('messageCreate', async (message) => {
     // guide 
 
     if (checkEnquiry.choices[0].message.content.includes("STREAMS")) {
+        var Doctext = fs.readFileSync("history.txt").toString('utf-8');
         const streamKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -1240,7 +1320,11 @@ client.on('messageCreate', async (message) => {
             {
                 role: 'user',
                 content: message.content,    
-            }        
+            },        
+            {
+                role: 'user',
+                content: `Please also consider this context: ${Doctext}`,
+            }
         ], 
     })
     var messageText = String(`${message.author.toString()}, ${streamKnowledge.choices[0].message.content}`)
@@ -1268,7 +1352,7 @@ client.on('messageCreate', async (message) => {
     if (checkEnquiry.choices[0].message.content.includes("TWITCH")) {
     const TwitchSend = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -1303,7 +1387,7 @@ client.on('messageCreate', async (message) => {
     if (checkEnquiry.choices[0].message.content.includes("LOTE")) {
         const LoteDKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -1342,7 +1426,7 @@ client.on('messageCreate', async (message) => {
         console.log(Doctext)
         const HistoryKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -1384,7 +1468,7 @@ client.on('messageCreate', async (message) => {
       if (checkEnquiry.choices[0].message.content.includes("MATH")) {
         const mathKnowledge = await openai.chat.completions
     .create({
-        model: 'gpt-4o-mini', 
+        model: 'gpt-4.1-mini', 
         messages: [
             {
                 role: 'system',
@@ -1420,9 +1504,10 @@ client.on('messageCreate', async (message) => {
         // philosophy
 
         if (checkEnquiry.choices[0].message.content.includes("PHILO")) {
+            var Doctext = fs.readFileSync("history.txt").toString('utf-8');
             const philoKnowledge = await openai.chat.completions
         .create({
-            model: 'gpt-4o-mini', 
+            model: 'gpt-4.1-mini', 
             messages: [
                 {
                     role: 'system',
@@ -1431,7 +1516,11 @@ client.on('messageCreate', async (message) => {
                 {
                     role: 'user',
                     content: message.content,    
-                }        
+                },        
+                {
+                    role: 'user',
+                    content: `Please also consider this context: ${Doctext}`,  
+                }
             ], 
         })
         var messageText = String(`${message.author.toString()}, ${philoKnowledge.choices[0].message.content}`)
@@ -1495,7 +1584,7 @@ client.on('messageCreate', async (message) => {
 
     const response = await openai.chat.completions
         .create({
-            model: 'gpt-4o-mini', 
+            model: 'gpt-4.1-mini', 
             messages: conversation,
         })
         .catch((error) => console.error('OpenAI Error: \n', error));
