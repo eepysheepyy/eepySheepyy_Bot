@@ -132,3 +132,9 @@ V2.0.6:
 - Added a !disconnect command for internal use of OBS Websockets, so that it limits issues with logging in and out of OBS remotely
 - Made a failsafe for Discord replies that the bot responds to that are deleted before it replies, so now, if it can't reply directly, it sends a message and no longer crashes
 - Slight prompt touch ups for Automod
+
+V2.0.7:
+- Upgraded the GPT version from gpt-4o-mini to gpt-4.1-mini
+- Tweaked prompts to fix ongoing issues with automod, reminders and categorisations as a whole
+- The bot now has more contextual awareness, as it reviews the logs and includes context in its responses
+- The bot can now use emotes in its responses accordingly on Twitch 
