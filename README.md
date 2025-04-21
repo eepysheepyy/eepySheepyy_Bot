@@ -137,4 +137,10 @@ V2.0.7:
 - Upgraded the GPT version from gpt-4o-mini to gpt-4.1-mini
 - Tweaked prompts to fix ongoing issues with automod, reminders and categorisations as a whole
 - The bot now has more contextual awareness, as it reviews the logs and includes context in its responses
-- The bot can now use emotes in its responses accordingly on Twitch 
+- The bot can now use emotes in its responses accordingly on Twitch
+
+V2.0.8
+- Added additional message filters on Discord and Twitch message system to check for appropriate content
+- Tweaked automod prompting
+- Tweaked categorisation system from triggering some messages into actions that weren't asked 
+- Tweaked general prompting to shorten responses and have them be more appopriate and a little more light hearted
