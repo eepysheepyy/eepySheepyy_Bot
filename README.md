@@ -30,6 +30,10 @@ obs-websocket-js - https://www.npmjs.com/package/obs-websocket-js
 
 The Addon (only needed if using the OBS version before the OBS Websocket Update) https://obsproject.com/forum/resources/obs-websocket-remote-control-obs-studio-using-websockets.466/
 
+Lastfm - https://www.npmjs.com/package/lastfm
+
+A lastfm API key: http://www.last.fm/api
+
 
 ## How to run: 
 
