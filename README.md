@@ -30,6 +30,10 @@ obs-websocket-js - https://www.npmjs.com/package/obs-websocket-js
 
 The Addon (only needed if using the OBS version before the OBS Websocket Update) https://obsproject.com/forum/resources/obs-websocket-remote-control-obs-studio-using-websockets.466/
 
+Lastfm - https://www.npmjs.com/package/lastfm
+
+A lastfm API key: http://www.last.fm/api
+
 
 ## How to run: 
 
@@ -144,3 +148,13 @@ V2.0.8
 - Tweaked automod prompting
 - Tweaked categorisation system from triggering some messages into actions that weren't asked 
 - Tweaked general prompting to shorten responses and have them be more appopriate and a little more light hearted
+
+V2.0.9
+- Updated general prompting to limit lengthy responses
+- Touched up some commands and basic information
+- Added a further automod capability known as 'BACKDOOR' which detects if a user is trying to navigate around the bots prompts or Rule 6
+
+V2.1.0
+- Added a filter for translation messages
+- Added Last.Fm functionality to link to my music
+- Added a MUSIC Categorisation for Discord/Twitch to see what I am listening to.
