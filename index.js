@@ -16,15 +16,9 @@ var lastfm = new LastFmNode({
   let currentTrackUrl = null;
   let currentTrackName = null;
 
-  var trackStream = lastfm.stream(process.env.LASTFM_USER);
-  trackStream.on('nowPlaying', function(track) {
-      console.log(track.url)
-      currentTrackUrl = track.url;
-      currentTrackName = track.name;
-  });
-  trackStream.start();
-
 const obs = new OBSWebSocket();
+
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
 async function connectToOBS() {
   
@@ -1167,6 +1161,23 @@ Twclient.on('message', async (channel, tags, message, self) => {
 
     // Music
     if (checkTwEnquiry.choices[0].message.content.includes("MUSIC")) {
+        try {
+            const trackStream = lastfm.stream(process.env.LASTFM_USER);
+        
+            trackStream.on('nowPlaying', function(track) {
+                console.log(track.url);
+                currentTrackUrl = track.url;
+                currentTrackName = track.name;
+            });
+            trackStream.start();
+            await sleep(2000);
+            trackStream.stop();
+        } catch (error) {
+            console.error("Error starting Last.fm stream:", error.message);
+        } finally {
+            console.log("Last.fm stream setup attempted — continuing program.");
+        }
+        console.log(currentTrackName, currentTrackUrl)
         var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
         const musicText = await openai.chat.completions
         .create({
@@ -1745,6 +1756,24 @@ client.on('messageCreate', async (message) => {
     }
     // Music
     if (checkEnquiry.choices[0].message.content.includes("MUSIC")) {
+        try {
+            const trackStream = lastfm.stream(process.env.LASTFM_USER);
+        
+            trackStream.on('nowPlaying', function(track) {
+                console.log(track.url);
+                currentTrackUrl = track.url;
+                currentTrackName = track.name;
+            });
+        
+            trackStream.start();
+            await sleep(2000);
+            trackStream.stop();
+        } catch (error) {
+            console.error("Error starting Last.fm stream:", error.message);
+        } finally {
+            console.log("Last.fm stream setup attempted — continuing program.");
+        }
+        console.log(currentTrackName, currentTrackUrl)
         const musicDText = await openai.chat.completions
         .create({
             model: 'gpt-4.1-mini', 
