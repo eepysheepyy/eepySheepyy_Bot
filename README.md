@@ -158,3 +158,14 @@ V2.1.0
 - Added a filter for translation messages
 - Added Last.Fm functionality to link to my music
 - Added a MUSIC Categorisation for Discord/Twitch to see what I am listening to.
+
+V2.1.1
+- Fixed fatal ETIMEDOUT error whilst using LastFM API - LastFM is now only used for a brief second to access song data
+
+V2.1.2
+- General prompt fixing to have some exceptions with automod & general prompt information has been changed
+- Slight Command Changes
+- Some Unlurk Powers have been added
+- Sheepy can now have long term memory if something is said that it believes should be remembered
+- Sheepy will use long term memory in some responses
+- There are some additional commands to change long term memory storage 
