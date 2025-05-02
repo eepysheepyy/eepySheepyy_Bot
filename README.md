@@ -72,9 +72,9 @@ A lastfm API key: http://www.last.fm/api
 
 ---------
 
-# Planning Phase 2 - Planning to Work on over April
+# Planning Phase 2 - Planning to Work on over next while
 
-- Unlurk Powers - Will be re-added, with hopefully a little flair, and maybe some Discord interactions (?)
+- Unlurk Powers with some Discord interactions (?)
 - Websockets interact with Stagify - Will be rebuilt, it is a quite complex system which will take me a bit to reconstruct on a different language!
 
 ---------
