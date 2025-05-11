@@ -421,8 +421,26 @@ Twclient.on('message', async (channel, tags, message, self) => {
         await obs.call('SetSceneItemEnabled', {sceneName: 'Full Screen', sceneItemId: 267, sceneItemEnabled: false});
         return
     }
+    if (message.includes("hirowifewall") && connected == 1){
+        await obs.call('SetSceneItemEnabled', {sceneName: 'InterFULL', sceneItemId: 69, sceneItemEnabled: true});
+        await obs.call('SetSceneItemEnabled', {sceneName: 'InterFULL', sceneItemId: 67, sceneItemEnabled: true});
+        await obs.call('SetSceneItemEnabled', {sceneName: 'Full Screen', sceneItemId: 272, sceneItemEnabled: true});
+        await obs.call('SetSceneItemEnabled', {sceneName: 'Full Screen', sceneItemId: 273, sceneItemEnabled: true});
+        return
+    }
+    if (message.includes("nohirowifewall") && connected == 1){
+        await obs.call('SetSceneItemEnabled', {sceneName: 'InterFULL', sceneItemId: 69, sceneItemEnabled: false});
+        await obs.call('SetSceneItemEnabled', {sceneName: 'InterFULL', sceneItemId: 67, sceneItemEnabled: false});
+        await obs.call('SetSceneItemEnabled', {sceneName: 'Full Screen', sceneItemId: 272, sceneItemEnabled: false});
+        await obs.call('SetSceneItemEnabled', {sceneName: 'Full Screen', sceneItemId: 273, sceneItemEnabled: false});
+        return
+    }
     if (message.includes("maihusbandwall") && connected == 1){
         await obs.call('SetSceneItemEnabled', {sceneName: 'Full Screen', sceneItemId: 269, sceneItemEnabled: true});
+        return
+    }
+    if (message.includes("nomaihusbandwall") && connected == 1){
+        await obs.call('SetSceneItemEnabled', {sceneName: 'Full Screen', sceneItemId: 269, sceneItemEnabled: false});
         return
     }
 
@@ -433,66 +451,6 @@ Twclient.on('message', async (channel, tags, message, self) => {
     if (message.includes("disconnect") && tags['display-name'] == "eepySheepyy" && connected == 1){
         connected = 0;
         fs.writeFile('lurkers.text', '', function(){console.log('Cleared Lurkers')})
-        return
-    }
-    if (message.includes("accept")){
-        // duel from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("accountage")){
-        // will require TwitchAPI
-        return
-    }
-    if (message.includes("cancelduel")){
-        // duel from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("commands")){
-        // leftover from StreamElements - remove once completed transition
-        return
-    }
-    if (message.includes("deny")){
-        // duel from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("duel")){
-        // duel from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("followage")){
-        // will require TwitchAPI
-        return
-    }
-    if (message.includes("join")){
-        // raffle from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("leaderboard")){
-        // points from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("points")){
-        // points from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("quote")){
-        // quotes from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("roulette")){
-        // roulette from streamElements - could attempt to build in the future
-        return
-    }
-    if (message.includes("uptime")){
-        // will require TwitchAPI
-        return
-    }
-    if (message.includes("vanish")){
-        // will require TwitchAPI
-        return
-    }
-    if (message.includes("watchtime")){
-        // will require TwitchAPI
         return
     }
     if (message.includes("chatstats")){
@@ -830,7 +788,7 @@ Twclient.on('message', async (channel, tags, message, self) => {
         messages: [
             {
                 role: 'system',
-                content: 'You are a Message Checker Terminal, and your job is to check for the following commands in a message, and respond accordingly, it will be set in the format of !<command>; response, please respond to such command, using only the response, and feel free to add onto such if you so choose, but please make such relevant, if the command is not listed (and you cant answer with the provided commands information), please respond that you couldnt locate that command. Here are the commands: !clap; Clapped their hands!, !leave; Storms out of the building. Gone. Vanished, !word; Your word is...<then you generate a random word!>, !english; Know that this chat is English Only. Bitte sprechen Sie auf Englisch. Apenas Inglês por favor. Lütfen İngilizce konuşun. Fale em inglês por favor. Пожалуйста говорите по английски. Proszę mów po angielsku. Habla en inglés por favor. Parlez en anglais sils vous plaît. Parla inglese per favore. Chat in het Engels a.u.b. Snakk engelsk, vær så snill. Vänligen prata engelska. يرجى التحدث باللغة الإنجليزية. कृपया केवल अंग्रेजी, !socials; Here is a link to all my Socials where you can find more of my Content: inktr.ee/eepysheepyy, !site; Here is a link to my website: eepysheepyy.com, !pcg; You can find the PCG extension by scrolling down on the channels chat or About page, it is red and white! (you will need to Grant it permission to be linked to your account), !prime; If you dont already know, if you link your Amazon Prime account to your Twitch account, you can get a completely free Subscription to any channel for a month (Needs to be reset every month) You are welcome to use it here if you WANT to, but feel free to use it anywhere!, !pcheck; you can find the rules for the Perception Check redeem here: docs.google.com/document/d/1fw7k0otY5KCSldyxIoU0xUvZ_51u8hOBAvMd31Nt39o/edit?usp=sharing, !yt; I am now trying to create shorter-form content! You can check it out at: www.youtube.com/@eepysheepyy if you are interested!, !model; My adorable sheep model was a commission piece created by MIYUUNA! - vgen.co/AngerRiceBall, !bitalerts; 1: Fake Discord Ping | 50-99: Distraction Dance | 69: Sus | 100-249: Level Up! | 250-499: Enmity Of The Dark Lord | 413: John: Play haunting piano refrain | 500-699: My Innermost Apocalypse | 612: Rose: Ride Pony | 700-999: Tee-Hee Time | 1000+: DEADRINGER | 1500+: Break Through it All, !tts; When using TTS (Chatcake) please follow all chat rules and twitch TOS Guidelines there will be no warnings if this is broken. Consequences will follow so please follow the respective rules. You can see: tts.monster/eepysheepyy for more information on using TTS and for unique voices and sounds, !pronouns; You can go to pronouns.alejo.io To install the pronoun extension in your chat then select your pronouns! , !raiders; Welcome in Raiders! Hoping you are all doing wonderfully well! Feel free to tell us at least ONE thing that you enjoyed about the stream you just came from! If you need, feel free to destream, get foods, hydrates & stretches in! Feel free to chill, vibe and relax back with us!, !dump; This is where I store all my Stream VODS, also known as the Stream Dump: www.youtube.com/@eepysheepyyvods , !tip; if you really want to, you can donate/tip to me here: ko-fi.com/eepysheepyy {non-refundable} and it will go straight towards improving quality of stream... but just know, its not at all expected of anyone, so please dont feel pressured to at all! , !resources; All stream resources that I use can be found here! docs.google.com/document/d/15iCyIvW7giean7e7M-FoxJfCkJ4bYSfk5l3VfZREbUQ/edit?usp=sharing, !digital; Digital is my fantastically amazing Channel Artist who you can check out here: about-eclipse.carrd.co/, !throne; Throne is a privacy-ensured wishlist where you can contribute towards stream equipment and other items Im saving up for. It would, of course be massively appreciated for you to check it out! throne.com/eepysheepyy, !merch; I officially have MERCH! Its Comfy, its Cozy and very swag (if I do say so myself) | You can check out the collection at: inanimatesheep-shop.fourthwall.com | 60% of all proceeds go to Charity! | And if youre feeling super generous, you are also able to gift merch to chat via the site above!, !pobox; I do have a PO Box! - Please use this for general letters and standard size parcels: PO Box 40, GRACEMERE QLD 4702. Please know that gifts or letters of any kind are never expected, but always appreciated <3, !hug; Wrong Input! Please use like this: !hug @user, !ban; Wrong Input! Please use like this: !ban @user, !discord; Here is a link to the community discord! Feel free to come and hang out with us! - https://discord.gg/BqZKzcwUVH , !cmd; Here is a list of all the commands <List all the command names here>"',
+                content: 'You are a Message Checker Terminal, and your job is to check for the following commands in a message, and respond accordingly, it will be set in the format of !<command>; response, please respond to such command, using only the response, and feel free to add onto such if you so choose, but please make such relevant, if the command is not listed (and you cant answer with the provided commands information), please respond with just: NULL. Here are the commands: !clap; Clapped their hands!, !leave; Storms out of the building. Gone. Vanished, !word; Your word is...<then you generate a random word!>, !english; Know that this chat is English Only. Bitte sprechen Sie auf Englisch. Apenas Inglês por favor. Lütfen İngilizce konuşun. Fale em inglês por favor. Пожалуйста говорите по английски. Proszę mów po angielsku. Habla en inglés por favor. Parlez en anglais sils vous plaît. Parla inglese per favore. Chat in het Engels a.u.b. Snakk engelsk, vær så snill. Vänligen prata engelska. يرجى التحدث باللغة الإنجليزية. कृपया केवल अंग्रेजी, !socials; Here is a link to all my Socials where you can find more of my Content: inktr.ee/eepysheepyy, !site; Here is a link to my website: eepysheepyy.com, !pcg; You can find the PCG extension by scrolling down on the channels chat or About page, it is red and white! (you will need to Grant it permission to be linked to your account), !prime; If you dont already know, if you link your Amazon Prime account to your Twitch account, you can get a completely free Subscription to any channel for a month (Needs to be reset every month) You are welcome to use it here if you WANT to, but feel free to use it anywhere!, !pcheck; you can find the rules for the Perception Check redeem here: docs.google.com/document/d/1fw7k0otY5KCSldyxIoU0xUvZ_51u8hOBAvMd31Nt39o/edit?usp=sharing, !yt; I am now trying to create shorter-form content! You can check it out at: www.youtube.com/@eepysheepyy if you are interested!, !model; My adorable sheep model was a commission piece created by MIYUUNA! - vgen.co/AngerRiceBall, !bitalerts; 1: Fake Discord Ping | 50-99: Distraction Dance | 69: Sus | 100-249: Level Up! | 250-499: Enmity Of The Dark Lord | 413: John: Play haunting piano refrain | 500-699: My Innermost Apocalypse | 612: Rose: Ride Pony | 700-999: Tee-Hee Time | 1000+: DEADRINGER | 1500+: Break Through it All, !tts; When using TTS (Chatcake) please follow all chat rules and twitch TOS Guidelines there will be no warnings if this is broken. Consequences will follow so please follow the respective rules. You can see: tts.monster/eepysheepyy for more information on using TTS and for unique voices and sounds, !pronouns; You can go to pronouns.alejo.io To install the pronoun extension in your chat then select your pronouns! , !raiders; Welcome in Raiders! Hoping you are all doing wonderfully well! Feel free to tell us at least ONE thing that you enjoyed about the stream you just came from! If you need, feel free to destream, get foods, hydrates & stretches in! Feel free to chill, vibe and relax back with us!, !dump; This is where I store all my Stream VODS, also known as the Stream Dump: www.youtube.com/@eepysheepyyvods , !tip; if you really want to, you can donate/tip to me here: ko-fi.com/eepysheepyy {non-refundable} and it will go straight towards improving quality of stream... but just know, its not at all expected of anyone, so please dont feel pressured to at all! , !resources; All stream resources that I use can be found here! docs.google.com/document/d/15iCyIvW7giean7e7M-FoxJfCkJ4bYSfk5l3VfZREbUQ/edit?usp=sharing, !digital; Digital is my fantastically amazing Channel Artist who you can check out here: about-eclipse.carrd.co/, !throne; Throne is a privacy-ensured wishlist where you can contribute towards stream equipment and other items Im saving up for. It would, of course be massively appreciated for you to check it out! throne.com/eepysheepyy, !merch; I officially have MERCH! Its Comfy, its Cozy and very swag (if I do say so myself) | You can check out the collection at: inanimatesheep-shop.fourthwall.com | 60% of all proceeds go to Charity! | And if youre feeling super generous, you are also able to gift merch to chat via the site above!, !pobox; I do have a PO Box! - Please use this for general letters and standard size parcels: PO Box 40, GRACEMERE QLD 4702. Please know that gifts or letters of any kind are never expected, but always appreciated <3, !hug; Wrong Input! Please use like this: !hug @user, !ban; Wrong Input! Please use like this: !ban @user, !discord; Here is a link to the community discord! Feel free to come and hang out with us! - https://discord.gg/BqZKzcwUVH , !cmd; Here is a list of all the commands <List all the command names here>". In your responses, please keep the special characters in links, and links only.',
             },
             {
                 role: 'user',
@@ -847,6 +805,9 @@ Twclient.on('message', async (channel, tags, message, self) => {
         ], 
     })
     console.log(TwCheck.choices[0].message.content)
+    if (TwCheck.choices[0].message.content.includes("NULL")){
+        return
+    }
     Twclient.say(channel, `@${tags.username} ${TwCheck.choices[0].message.content}`);
     const data = `\n @${tags.username} ${TwCheck.choices[0].message.content}`
             fs.appendFile('history.txt', data, (err) => {
