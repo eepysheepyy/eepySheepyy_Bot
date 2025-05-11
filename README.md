@@ -168,4 +168,8 @@ V2.1.2
 - Some Unlurk Powers have been added
 - Sheepy can now have long term memory if something is said that it believes should be remembered
 - Sheepy will use long term memory in some responses
-- There are some additional commands to change long term memory storage 
+- There are some additional commands to change long term memory storage
+
+V2.1.3
+- Bot will now only respond to known Twitch commands, to avoid consistent "I couldn't locate that command" messages
+- Slight prompt fixes, added additional command.
