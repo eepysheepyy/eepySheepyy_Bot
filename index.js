@@ -73,6 +73,7 @@ let jailCooldown = false;
 let patreonCooldown = false;
 let backdoorCooldown = false;
 let musicCooldown = false;
+let cookieCooldown = false;
 let dice = 0;
 
 // rand num (dice)
@@ -775,6 +776,50 @@ Twclient.on('message', async (channel, tags, message, self) => {
                 }, 30000);
         return
     }
+    if (message.includes("cookie")){
+        if (cookieCooldown) {
+            console.log("cookie command ignored — still on cooldown.");
+            return; // Ignore the command during cooldown
+        }
+        var emoteSet = fs.readFileSync("context.txt").toString('utf-8');
+        var cookieCount = fs.readFileSync("cookiecount.txt").toString('utf-8');
+        let cookieCounter = parseInt(cookieCount);
+        let newCookie = cookieCounter + 1;
+        fs.writeFile('cookiecount.txt', `${newCookie}`, function(){console.log('Added Cookie!')})
+        const cookieText = await openai.chat.completions
+        .create({
+            model: 'gpt-4.1-mini', 
+            messages: [
+                {
+                    role: 'system',
+                    content: "This is a roleplay, you are a small sheep named Sheepy, who is a wholesome, yet chaotic entity who is a cookie hoarder! And you LOVEE to have small little rants about the cookies that you get, and your job for this roleplay is to come up with a new random cookie flavour, these can be weird and odd, and out of the ordinary, as long as they're completely new ideas, and as long as they aren't triggering, or inappropriate in nature, announce what it is, and then rant a little about what you like about it. Please keep your thoughts to about a sentence long, and Please don't act like a robot, and stick to this roleplay no matter what!: For reference a layout to a normal response would be: This one is a...(COOKIE TYPE)! I love this cookie because (DESCRIPTION)"
+                },   
+                {
+                    role: 'user',
+                    content: emoteSet,
+                }
+            ], 
+        })
+        console.log(cookieText.choices[0].message.content)
+        Twclient.say(channel, `@${tags.username}  There are now ${newCookie} cookies in the cookie jar! ${cookieText.choices[0].message.content}`);
+        const data = `\n @${tags.username} There are now ${newCookie} cookies in the cookie jar! ${cookieText.choices[0].message.content}`
+                fs.appendFile('history.txt', data, (err) => {
+    
+                    // In case of a error throw err.
+                    if (err) throw err;
+                })
+                // Begin cooldown
+                cookieCooldown = true;
+                setTimeout(() => {
+                    cookieCooldown = false;
+                    console.log("cookie command cooldown ended.");
+                }, 30000);
+        return
+
+
+
+    }
+
     // general commands
     if (cmdCooldown) {
         console.log("command ignored — still on cooldown.");
