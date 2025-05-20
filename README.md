@@ -173,3 +173,6 @@ V2.1.2
 V2.1.3
 - Bot will now only respond to known Twitch commands, to avoid consistent "I couldn't locate that command" messages
 - Slight prompt fixes, added additional command.
+
+V2.1.4
+- Added !cookie as per channel point redeem request
